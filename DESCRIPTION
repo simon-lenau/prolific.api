@@ -1,0 +1,12 @@
+Package: prolific.api
+Title: A User-Friendly Interface for Accessing the Prolific API
+Version: 0.0.0.9000
+Authors@R: 
+    person(given="Simon", family="Lenau" , email="lenau@cispa.de", role = c("aut", "cre"))
+Description: A user-friendly interface for creating and managing empirical crowd-sourcing studies via API access to the Prolific platform <https://www.prolific.co>. 
+License: GPL (>= 3)
+Imports: data.table, jsonlite, methods, utils
+SystemRequirements: curl (https://curl.se/)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
