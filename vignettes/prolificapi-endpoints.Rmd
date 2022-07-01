@@ -1,0 +1,195 @@
+---
+title: "prolific.api: Available Prescreeners for [prolific.co](https://www.prolific.co/)"
+author: "Simon Lenau"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{prolific.api: Available Prescreeners for [prolific.co](https://www.prolific.co/)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}
+params:
+  EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
+---
+
+```{r, include = FALSE}
+stopifnot(require(knitr))
+options(width = 90)
+knitr::opts_chunk$set(
+  eval = FALSE,
+  collapse = !TRUE,
+  comment = "#>",
+  dev = "jpeg",
+  dpi = 100,
+  fig.asp = 0.8,
+  fig.width = 5,
+  out.width = "60%",
+  fig.align = "center"
+)
+library(prolific.api)
+library(lenau)
+```
+
+
+
+
+
+**List of available Prescreeners**  
+***(Click on the respective row to show all available constraints and R-code snippets)***
+
+
+`r 
+library(data.table)
+library(prolific.api)
+library(reactable)
+
+# Create API access
+prolific_api_access <- api_access(api_token = readLines("~/.prolific_api/ers_prolific_api_token", warn = FALSE))
+
+fixed_width(1:10, justify = "r")
+
+
+list_of_prescreeners <- prolific_api_access$prescreeners(show_full = TRUE)
+
+list_of_prescreeners_red <- rbindlist(lapply(list_of_prescreeners, function(x) {
+  x$prescreener[, .SD, .SDcols = c("title", "category", "subcategory")]
+}))
+
+list_of_prescreeners_red[, constraints :=
+  (lapply(list_of_prescreeners, function(x) paste0(x$available_constraints$label, collapse = "    ")))]
+
+
+example_code_fmt <- function(tbl,row,col,title) {
+  paste0(
+    "<p style=\"margin-left: 40px\">",
+    "prolific_prescreener(",
+    "title = \"", title, "\", ",
+    "\"",as.character(tbl[row, col]),"\"",
+    ")",
+    "</p>"
+  )
+}
+
+constraint_fmt <- function(x, ncol = 4,title = NULL) {
+  if (length(x) >= 10) {
+    x <- sort(x)
+  }
+  nrow <- ceiling(length(x) / ncol)
+  tbl <- matrix(c(x, rep("", nrow * ncol - length(x))), ncol = ncol, byrow = TRUE)
+  colnames(tbl) <- paste0("V", 1:ncol)
+  
+example_code_intro_pre <-
+  paste0(
+    "<p style=\"margin-left: 3px; margin-right: 3px;font-size:90%;font-family:Verdana;color:#1f1f2e\">",
+    "Example Code for selecting participants where ", title, " is "
+  )
+
+example_code_intro_post <-
+  paste0(
+    "</p>"
+  )
+
+
+example_code_pre <- paste0(
+  "<p style=\"margin-left: 3px; margin-right: 3px; background-color:#999999;text-align:center;font-size:90%;color:#1affff;font-family:Courier New\">",
+  "prolific_prescreener(",
+  "title = \"", title, "\", "
+)
+example_code_post <- paste0(
+    ")",
+  "</p>"
+)
+
+  out_list <- lapply(
+    1:ncol(tbl),
+    function(i) {
+      colDef(
+        html = TRUE, 
+        resizable = TRUE, 
+        name = "",
+        show = TRUE,
+        details = function(index) {
+          if (tbl[index, i] != "") {
+            paste0(
+              example_code_intro_pre,
+              as.character(tbl[index, i]),
+              example_code_intro_post,
+              example_code_pre,
+              "\"", as.character(tbl[index, i]), "\"",
+              " = ",
+              "TRUE",
+              example_code_post
+            )
+          } else {
+            NULL
+          }
+        
+        }
+      )
+    }
+  )
+  
+  names(out_list) <- colnames(tbl)
+  
+  reactable(tbl,
+    columns = out_list, 
+    borderless = TRUE, 
+    outlined = FALSE,
+    compact = TRUE,
+    searchable = !TRUE,
+    columnGroups = list(colGroup(
+      html = TRUE,
+      name = paste0(
+        "Possible constraints",
+        if(!is.null(title)){
+          paste0(" for prescreener title '",title,"'")
+        },
+        "<br>",
+        "(Click on the respective constraint to show example R-Code)"
+      ),
+      columns = names(out_list),
+      align="left"
+    )),
+    theme = reactableTheme(borderWidth = "0px", backgroundColor="#f2f2f2",color="#000000"),
+    striped=FALSE,
+    minRows = nrow,
+    defaultPageSize = nrow
+  )
+}
+
+html <- function(x, inline = FALSE) {
+  container <- if (inline) htmltools::span else htmltools::div
+  container(dangerouslySetInnerHTML = list("__html" = x))
+}
+
+reactable(list_of_prescreeners_red[,],
+  searchable = TRUE,
+  showSortable = TRUE,
+  filterable = !TRUE,
+  highlight = TRUE,
+  striped = !TRUE,
+  compact=TRUE,
+  minRows = nrow(list_of_prescreeners_red)  ,
+  defaultPageSize = nrow(list_of_prescreeners_red) ,
+  columns = list(
+    title = colDef(name = "Prescreener title", html = TRUE, resizable = TRUE,minWidth=200),
+    category = colDef(name = "Category",show = TRUE,maxWidth=2000,minWidth=100,
+    style = function(value) {list("color" = "lightgreen")}),
+    subcategory = colDef(name = "Subategory",show = TRUE,maxWidth=1010,minWidth=100),
+    constraints = colDef(show = !TRUE, searchable = TRUE)
+  ),
+  # if there exists a comment, make row expandable
+  details = function(index) {
+    constraint_fmt(
+      list_of_prescreeners[[index]]$available_constraints$label, 
+      title = list_of_prescreeners[[index]]$prescreener$title
+    )
+  },
+    theme = reactableTheme(color = "#000000")
+)
+`
+
+
+

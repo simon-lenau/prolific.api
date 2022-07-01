@@ -1,0 +1,61 @@
+---
+title: "The prolific.api package"
+author: "Simon Lenau"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{The prolific.api package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}
+params:
+  EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
+---
+
+```{r, include = FALSE}
+stopifnot(require(knitr))
+options(width = 90)
+knitr::opts_chunk$set(
+  eval = FALSE,
+  collapse = TRUE,
+  comment = "#>",
+  dev = "jpeg",
+  dpi = 100,
+  fig.asp = 0.8,
+  fig.width = 5,
+  out.width = "60%",
+  fig.align = "center"
+)
+library(prolific.api)
+```
+
+<table>
+<tbody>
+  <tr>
+  <details>
+    <summary> 
+      <td style="text-align:right;"> 1xx </td>
+    </summary>
+
+    Blabla
+  </details>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 2 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 3 </td>
+  </tr>
+</tbody>
+</table>
+
+
+<details>
+  <summary> 
+   A | B |
+  </summary>
+
+  C
+</details>
