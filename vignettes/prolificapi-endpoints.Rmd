@@ -51,56 +51,45 @@ prolific_api_access <- api_access(api_token = readLines("~/.prolific_api/ers_pro
 fixed_width(1:10, justify = "r")
 
 
-list_of_prescreeners <- prolific_api_access$prescreeners(show_full = TRUE)
+list_of_prescreeners <- prolific_api_access$.internals$methods$prescreeners()
 
-list_of_prescreeners_red <- rbindlist(lapply(list_of_prescreeners, function(x) {
-  x$prescreener[, .SD, .SDcols = c("title", "category", "subcategory")]
-}))
-
-list_of_prescreeners_red[, constraints :=
-  (lapply(list_of_prescreeners, function(x) paste0(x$available_constraints$label, collapse = "    ")))]
+list_of_prescreeners[, constraints :=
+  (lapply(list_of_prescreeners$attributes, function(x) paste0(x$label, collapse = "    ")))]
 
 
-example_code_fmt <- function(tbl,row,col,title) {
-  paste0(
-    "<p style=\"margin-left: 40px\">",
-    "prolific_prescreener(",
-    "title = \"", title, "\", ",
-    "\"",as.character(tbl[row, col]),"\"",
-    ")",
-    "</p>"
-  )
-}
+constraint_fmt <- function(x, ncol = 4) {
 
-constraint_fmt <- function(x, ncol = 4,title = NULL) {
-  if (length(x) >= 10) {
-    x <- sort(x)
+  labels <- x$attributes[[1]]$label
+  title <- x$title
+  cls <- x$cls
+
+  if (length(labels) >= 10) {
+    labels <- sort(labels)
   }
-  nrow <- ceiling(length(x) / ncol)
-  tbl <- matrix(c(x, rep("", nrow * ncol - length(x))), ncol = ncol, byrow = TRUE)
+  nrow <- ceiling(length(labels) / ncol)
+  tbl <- matrix(c(labels, rep("", nrow * ncol - length(labels))), ncol = ncol, byrow = TRUE)
   colnames(tbl) <- paste0("V", 1:ncol)
   
-example_code_intro_pre <-
-  paste0(
-    "<p style=\"margin-left: 3px; margin-right: 3px;font-size:90%;font-family:Verdana;color:#1f1f2e\">",
-    "Example Code for selecting participants where ", title, " is "
-  )
+  example_code_intro_pre <-
+    paste0(
+      "<p style=\"margin-left: 3px; margin-right: 3px;font-size:90%;font-family:Verdana;color:#1f1f2e\">",
+      "Example Code for selecting participants where '", title, "' is '"
+    )
 
-example_code_intro_post <-
-  paste0(
+  example_code_intro_post <-
+    paste0(
+      "':</p>"
+    )
+
+  example_code_pre <- paste0(
+    "<p style=\"margin-left: 3px; margin-right: 3px; background-color:#999999;text-align:center;font-size:90%;color:#1affff;font-family:Courier New\">",
+    "prolific_prescreener(",
+    "title = \"", title, "\", "
+  )
+  example_code_post <- paste0(
+      ")",
     "</p>"
   )
-
-
-example_code_pre <- paste0(
-  "<p style=\"margin-left: 3px; margin-right: 3px; background-color:#999999;text-align:center;font-size:90%;color:#1affff;font-family:Courier New\">",
-  "prolific_prescreener(",
-  "title = \"", title, "\", "
-)
-example_code_post <- paste0(
-    ")",
-  "</p>"
-)
 
   out_list <- lapply(
     1:ncol(tbl),
@@ -112,14 +101,20 @@ example_code_post <- paste0(
         show = TRUE,
         details = function(index) {
           if (tbl[index, i] != "") {
+            pos <- min(which(x$attributes[[1]]$label %in% tbl[index, i]))
             paste0(
               example_code_intro_pre,
               as.character(tbl[index, i]),
               example_code_intro_post,
               example_code_pre,
               "\"", as.character(tbl[index, i]), "\"",
-              " = ",
-              "TRUE",
+              if (grepl("SelectAnswer", cls)) {
+                " = TRUE"
+              } else {
+                paste0(
+                  " = ",
+                  x$attributes[[1]][pos, .SD,.SDcols = c("max","min","value")]                )
+              },
               example_code_post
             )
           } else {
@@ -164,27 +159,29 @@ html <- function(x, inline = FALSE) {
   container(dangerouslySetInnerHTML = list("__html" = x))
 }
 
-reactable(list_of_prescreeners_red[,],
+reactable(list_of_prescreeners,
   searchable = TRUE,
   showSortable = TRUE,
   filterable = !TRUE,
   highlight = TRUE,
   striped = !TRUE,
   compact=TRUE,
-  minRows = nrow(list_of_prescreeners_red)  ,
-  defaultPageSize = nrow(list_of_prescreeners_red) ,
+  minRows = nrow(list_of_prescreeners)  ,
+  defaultPageSize = nrow(list_of_prescreeners) ,
   columns = list(
     title = colDef(name = "Prescreener title", html = TRUE, resizable = TRUE,minWidth=200),
     category = colDef(name = "Category",show = TRUE,maxWidth=2000,minWidth=100,
     style = function(value) {list("color" = "lightgreen")}),
-    subcategory = colDef(name = "Subategory",show = TRUE,maxWidth=1010,minWidth=100),
-    constraints = colDef(show = !TRUE, searchable = TRUE)
+    subcategory = colDef(name = "Subcategory",show = TRUE,maxWidth=1010,minWidth=100),
+    constraints = colDef(show = !TRUE, searchable = TRUE),
+    id = colDef(show = FALSE),
+    cls = colDef(show = FALSE),
+    attributes = colDef(show = FALSE)
   ),
   # if there exists a comment, make row expandable
   details = function(index) {
     constraint_fmt(
-      list_of_prescreeners[[index]]$available_constraints$label, 
-      title = list_of_prescreeners[[index]]$prescreener$title
+      list_of_prescreeners[index, ]
     )
   },
     theme = reactableTheme(color = "#000000")
