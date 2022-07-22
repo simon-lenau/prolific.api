@@ -30,9 +30,13 @@ prolific_study$methods(
 
         # Define the fields that are printed
         output_fields <- c(
-            "name", "internal_name", "id",
+            "name",
+            "internal_name",
+            "id",
+            "project",
             "external_study_url",
-            "total_available_places", "reward"
+            "total_available_places",
+            "reward"
         )
 
 

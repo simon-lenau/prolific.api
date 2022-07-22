@@ -45,6 +45,7 @@
                 naivety_distribution_rate = prolific_study$naivety_distribution_rate,
                 name = prolific_study$name,
                 peripheral_requirements = prolific_study$peripheral_requirements,
+                project = prolific_study$project,
                 prolific_id_option = prolific_study$prolific_id_option,
                 reward = prolific_study$reward,
                 total_available_places = prolific_study$total_available_places

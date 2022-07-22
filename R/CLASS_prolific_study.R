@@ -296,6 +296,7 @@ prolific_study <- setRefClass(
         naivety_distribution_rate = function(value) .accessField("naivety_distribution_rate", value, .self$.internals$fields, TRUE),
         name = function(value) .accessField("name", value, .self$.internals$fields, TRUE),
         peripheral_requirements = function(value) .accessField("peripheral_requirements", value, .self$.internals$fields, TRUE),
+        project = function(value) .accessField("project", value, .self$.internals$fields, TRUE),
         prolific_id_option = function(value) .accessField("prolific_id_option", value, .self$.internals$fields, TRUE),
         reward = function(value) .accessField("reward", value, .self$.internals$fields, TRUE),
         total_available_places = function(value) .accessField("total_available_places", value, .self$.internals$fields, TRUE),
@@ -320,6 +321,7 @@ prolific_study <- setRefClass(
                      naivety_distribution_rate = 1,
                      name = NULL,
                      peripheral_requirements = NULL,
+                     project = NA_character_,
                      prolific_id_option = "url_parameters",
                      reward = 1L,
                      total_available_places = 1L,
@@ -353,6 +355,7 @@ prolific_study <- setRefClass(
                         naivety_distribution_rate = list(typeof = "double"),
                         name = list(typeof = "character", length = 1),
                         peripheral_requirements = list(typeof = "character"),
+                        project = list(typeof = "character", length = 1),
                         prolific_id_option = list(typeof = "character", length = 1),
                         reward = list(typeof = "integer", length = 1),
                         total_available_places = list(typeof = "integer", length = 1),
@@ -375,6 +378,7 @@ prolific_study <- setRefClass(
                 naivety_distribution_rate <<- naivety_distribution_rate
                 name <<- name
                 peripheral_requirements <<- as.character(peripheral_requirements)
+                project <<- project
                 prolific_id_option <<- prolific_id_option
                 reward <<- as.integer(reward)
                 total_available_places <<- as.integer(total_available_places)

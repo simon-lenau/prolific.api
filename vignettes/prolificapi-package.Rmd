@@ -29,14 +29,45 @@ knitr::opts_chunk$set(
   out.width = "60%",
   fig.align = "center"
 )
-library(prolific.api)
 library(lenau)
+library(prolific.api)
+library(data.table)
+library(reactable)
+library(ggthemes)
 ```
 
-The **prolific.api** package provides functionalities for creating and managing empirical crowd-sourcing studies on the 
-[prolific.co](https://www.prolific.co/) platform by using the platform's API access.
+<!-- Read the code chunks to be used -->
+```{r, include=FALSE, cache=FALSE,eval=TRUE}
+knitr::read_chunk(
+  "prolificapi-package-chunks.R"
+)
+```
+
+```{r, include=FALSE, cache=FALSE,eval=TRUE}
+knitr::read_chunk(
+  "list_prescreeners.R"
+)
+```
+
+```{r start-date, include = FALSE,eval=TRUE}
+```
+
+```{r access-create-do, include = FALSE,eval=TRUE}
+```
+
+
+
+
 
 ## Introduction
+
+The **prolific.api** package provides functionalities for accessing the 
+[prolific.co](https://www.prolific.co/) platform.
+This allows to create and manage empirical crowd-sourcing studies from `R`.
+A number of prescreening characteristics can be used to recruit specific groups of 
+participants for a study.
+
+
 
 
 ***Note:***
@@ -69,22 +100,24 @@ The `api_access` class is designed for interacting with
 The central method to achieve this is `access`, which can be used
 to exchange (retrieve and submit) information with the API.
 
-#### Setting up `api_access`
+#### Setting up an `api_access`
+
+
 
 An `api_access` object can be created by 
 
-```{r include = FALSE,eval=TRUE}
-prolific_api_access <- api_access(api_token = readLines("~/.prolific_api/R_package_prolific.api_token", warn = FALSE))
-```
-
-```{r eval = FALSE}
+```{r, eval = FALSE}
 prolific_api_access <- api_access(api_token = "<api_token>")
 ```
 
-The `api_token` is the only information that **needs to be specified** for the API acces to work. 
+
+
+
+
+The `api_token` is the only information that **needs to be specified** for the API access to work. 
 All other settings when creating an `api_access` rarely require adjustment.
 
-To check whether the token is valid,  use the `check_authorization` method:
+To check whether the token is valid, the `check_authorization` method is used:
 ```{r eval = TRUE}
 check_authorization(prolific_api_access)
 ```
@@ -94,13 +127,15 @@ The section on
 *[obtaining an API token](#get-token)* 
 describes how to obtain a valid token.
 
-#### Using `api_access` 
+#### Using an `api_access` 
 
-The actual API access is mostly carried out using the `access` method of the `api_access` class.
-`access` provides different methods for exchanging information with the API, depending on the purpose:
+The actual API access is carried out using the `access` method of the `api_access` class.
+The 
+`access`
+method wraps different methods for exchanging information with the API, depending on the purpose:
 
-| Method     | Function                                   |
-| :--------- | :----------------------------------------- |
+| Method   | Functionality                              |
+| :------- | :----------------------------------------- |
 | `get`    | Retrieving endpoint / data                 |
 | `post`   | Create endpoint / send data                |
 | `patch`  | Change endpoint using a delta (difference) |
@@ -112,18 +147,19 @@ This table lists the available methods, which are specified in the `method` argu
 For retrieving information from [prolific.co](https://www.prolific.co/) using the `get` method,
 a simple example is
 
-```{r eval = FALSE}
+```{r, eval = FALSE}
 access(prolific_api_access,
   method = "get",
-  endpoint = "users/me"
+  endpoint = "
+  users/me"
 )
 ```
-which shows some information about the account you are accessing the API with.
+to obtain information about the account you are accessing the API with.
 
 
 A simple example for submitting information to the API using the `post` method is
 
-```{r eval = FALSE}
+```{r}
 access(prolific_api_access,
   endpoint = "study-cost-calculator",
   method = "post",
@@ -134,38 +170,25 @@ access(prolific_api_access,
 )
 ```
 
-which calculates the cost  (including fees and taxes)  of a study where `5` participants are paid `1` € each.
+to calculate the cost  (including fees and taxes)  of a study where `5` participants are paid `1` £ each.
 
-More realistic examples are provided in the [examples](#examples) section below, while 
-a list of further endpoints is provided in the 
-<!-- [vignette on Prolific's API endpoints](prolificapi-endpoint.html)
+More realistic examples are provided in the sections below, while 
+a list of further endpoints is provided in  
+<!-- the [vignette on Prolific's API endpoints](prolificapi-endpoint.html)
 as well as  -->
 [Prolific's API documentation](https://docs.prolific.co/docs/api-docs/public).
 
 ### Set-up and change studies: The `prolific_study` class
 
-The `prolific_study` class provides a lightweigt interface for
-creating, and managing studies on [prolific.co](https://www.prolific.co/) using `R`.
+The `prolific_study` class provides a lightweight interface for
+creating, managing and modifying studies on [prolific.co](https://www.prolific.co/) using `R`.
 There are a lot of options to be chosen from when setting up such a study, but let's start with a simple example.
 
 #### Creating a `prolific_study`
 
 A minimal specification for creating a `prolific_study` contains the following information:
 
-```{r eval = TRUE}
-new_study <- prolific_study(
-  # Information shown to participants
-  name = "<Publicly visible study name>",
-  description = "<Publicly visible study description>",
-  estimated_completion_time = 1,
-  reward = 1,
-  # URL participants are redirected to
-  external_study_url = "https://www.link_to_my_study.com",
-  # Completion code to verify participation
-  completion_code = "123",
-  # Number of participants to recruit
-  total_available_places = 10
-)
+```{r, study-create-simple, eval = TRUE}
 ```
 
 
@@ -179,7 +202,7 @@ contains the study's
 - **reward** and
 - **total available places**.
 
-To them, the study will then look like this:
+To them, the study will then will be presented as:
 
 ![Preview of the Prolific Study](Study_Preview.jpg){width=75%}  
 
@@ -203,7 +226,7 @@ after completing the study.
 
 
 
-#### Checking the Validity of a `prolific_study`
+<!-- #### Validity-Check for a `prolific_study`
 
 The arguments for constructing `new_study` above are the ones that need to be specified for a study to be 
 created on [prolific.co](https://www.prolific.co/). To make sure that all necessary fields of a `prolific_study`
@@ -222,120 +245,175 @@ validity_check(new_study_without_information)
 ```
 
 (note that the `estimated_completion_time`, `reward` and `total_available_places` 
-are not mentioned in this message because they have default values of `1`).
+are not mentioned in this message because they have default values of `1`). -->
 
-
-#### Updating Fields in a `prolific_study`  {#studies_fields_update}
-
-All classes provided by the `prolific.api` allow field access in `S4` and `RefClass` style.
-Therefore, the information contained in a `prolific_study` can be changed using either syntax.
-For example, you can change the name of `new_study` using either one:
-
-``` {r eval = TRUE}
-# First way to set a new name (S4 style)
-name(new_study) <- "<A more informative study name>"
-# Second way to set a new name (RefClass style)
-new_study$name <- "<A more informative study name>"
-```
-
-Both lines of code have the same effect, and the `name` field of `new_study` is now `"<A more informative study name>"`:
-
-``` {r eval = TRUE}
-print(new_study)
-```
-
-Equivalent access works for all other fields in `prolific_study` objects, 
-which are listed in `help(prolific_study)`.
-
-##### Posting, Patching and Deleting a `prolific_study` on the platform
-<!-- ##### Posting a `prolific_study` on the platform -->
+##### Posting a `prolific_study` on the platform
 
 After creating or changing a `prolific_study` in `R`,
 the study can be submitted to  [prolific.co](https://www.prolific.co/) 
 to represent it on the platform.
 
-To submit the newly created `new_study` to the Prolific platform,
+
+To submit the `new_study` created above to the Prolific platform,
 we use 
 
 
-``` {r eval = TRUE}
-prolific_api_access$access(
-  endpoint = "studies",
-  method = "post",
-  data = new_study
-)
+``` {r, study-post-simple, eval = TRUE, show = TRUE}
 ```
 
-The output shows that the study has been assigned an `id`, which is 
-`"`r new_study$id`"` in this case.
+The output shows that the study has been assigned an `id` (`"`r new_study$id`"` in this case).
 This `id` is determined by [prolific.co](https://www.prolific.co/), 
 and the unique identifier for the study on the platform.
 You can now also find the study in the webinterface.
 
-<!-- ##### Patching a `prolific_study` on the platform -->
 
-To change the study specifications, you can adjust the fields as described in 
-["Updating Fields in a `prolific_study`"](#studies_fields_update),
-and then use `prolific_api_access$access` with `method = "patch"` or `method = "put"`
-for the studie's endpoint, which is 
-`"`r paste0("studies/",new_study$id)`"` in this case:
+#### Getting a `prolific_study` from the platform
 
-```{r, include=FALSE, cache=FALSE,eval=TRUE}
-writeLines(
-  c(
-    "## ---- get-study",
-    "# Decrease the study's total available places",
-    "total_available_places(new_study) <- 5L",
-    "# Increase the study's reward",
-    "reward(new_study) <- 2L",
-    "# Change the study's name",
-    "name(new_study) <- \"How to change studies on Prolific\"",
-    "# Change the study's name",
-    "prolific_api_access$access(",
-    "",
-    "# Patch the study on prolific.co",
-    paste0("\tendpoint = c(\"studies\",new_study$id", "),"),
-    "\tmethod = \"patch\",",
-    "\tdata = new_study",
-    ")"
-  ),
-  con = "tmpfile.R"
+The study's `id` is also required if you want to obtain a previously created study from [prolific.co](https://www.prolific.co/).
+For a study that is not yet represented in an R object, we first need to find out its id.
+
+A list of *all* studies in the Prolific account can be obtained via
+
+``` {r, study-list, eval = TRUE, show = TRUE}
+```
+
+``` {r, study-list-modify, include = FALSE,eval=TRUE}
+```
+
+which  in this case includes only the new study created above:
+
+``` {r, study-list-print, eval = TRUE, show = TRUE}
+```
+
+
+To retrieve the study from the API, we use
+the
+study's endpoint, which is 
+`"`r paste0("studies/",new_study$id)`"`:
+
+
+``` {r, study-get-function, eval = TRUE, include = FALSE}
+```
+
+``` {r, eval = TRUE, include = FALSE}
+knitr::read_chunk(
+  lines = study_get_function(new_study)
+)
+```
+``` {r, study-get, eval = TRUE, include = TRUE}
+```
+
+#### Updating Fields in a `prolific_study`  {#studies_fields_update}
+
+The fields in a `prolific_study` can be changed using either `S4` and `RefClass` syntax.
+For example, you can change the name of `new_study` using either one:
+
+``` {r, study-rename, eval = TRUE, include = TRUE}
+```
+
+Both lines of code have the same effect: The `name` of `new_study` is now "`r new_study$name`".
+Equivalent access works for all other fields in `prolific_study` objects, 
+which are listed in the documentation `help(prolific_study)`.
+
+
+
+##### Patching a `prolific_study` on the platform
+
+To actually apply the changes made in the previous paragraph,
+`prolific_api_access$access` with `method = "patch"` or `method = "put"` is used:
+
+``` {r, study-patch-function, eval = TRUE, include = FALSE}
+```
+
+``` {r, eval = TRUE, include = FALSE}
+knitr::read_chunk(
+  lines = study_patch_function(new_study)
 )
 ```
 
-
-```{r, include=FALSE, cache=FALSE,eval=TRUE}
-knitr::read_chunk("tmpfile.R")
+``` {r, study-patch, eval = TRUE, include = TRUE}
 ```
 
-```{r, get-study, eval=TRUE,include=TRUE}
+This applies a patch to the study on [prolific.co](https://www.prolific.co/).
+
+###### Deleting a `prolific_study` on the platform
+Ultimately, a study can be deleted using `access` with `method = "delete"` on the study's endpoint:x
+
+``` {r, study-delete-function, eval = TRUE, include = FALSE}
 ```
 
-
-
-<!-- ##### Deleting a `prolific_study` on the platform -->
-
-Ultimately, a study can be deleted using `access` with `method = "delete"` on the study's endpoint:
-
-``` {r eval = TRUE, include = TRUE,results = FALSE}
-prolific_api_access$access(
-  endpoint = c("studies", new_study$id),
-  method = "delete"
+``` {r, eval = TRUE, include = FALSE}
+knitr::read_chunk(
+  lines = study_delete_function(new_study)
 )
+```
+
+``` {r, study-delete, eval = FALSE, include = TRUE,results=FALSE}
 ```
 
 ### Defining eligible participants: The `prolific_prescreener` class 
 
-A list of all currently available prescreeners is provided in the
-[Prolific prescreeners vignette](prolificapi-prescreeners.html)
 
+`prolific_prescreener` objects are used for characterizing the participants to be selected.
+In that sense, they contain a description of the person's to be recruited in a `prolific_study`.
+Various characteristics are available to define this target group. An exhaustive list is provided in the
+[list of available prescreeners](#prescreener-list).
 
-## Detailed Examples {#examples}
+#### Setting up `prolific_prescreeners`
 
-```{r setup}
-library(prolific.api)
+To make a simple example, participants who currently live in the United States can be selected using the `prolific_prescreener`
+
+``` {r, prescreener-us, eval = TRUE, include = TRUE,results = FALSE}
 ```
 
+You can combine multiple constraints for a single prescreener. 
+To extend the above prescreener to also allow for participants from the UK, use
+
+
+``` {r, prescreener-uk-us, eval = TRUE, include = TRUE,results = FALSE}
+```
+
+Some of the prescreeners allow to specify lower and upper boundaries for a numerical variable.
+For example, participants with an age between `20` and `24` can be selected using the `prolific_prescreener`
+
+``` {r, prescreener-age, eval = TRUE, include = TRUE,results = FALSE}
+```
+#### Using `prolific_prescreeners`
+
+The prescreeners can be combined in a list and included as the `eligibility_requirements` of a `prolific_study`: 
+
+```{r, study-create-prescreener, eval = TRUE}
+```
+
+This example creates a study that has the same information as `new_study` above, but is available only for
+persons living in the UK or US who between `20` and `24` years of old.
+
+As above, the study can be submitted to [prolific.co](https://www.prolific.co/) using
+
+```{r, study-post-prescreener, eval = FALSE, results = FALSE}
+```
+
+
+**A full searchable list of all currently available prescreeners (as of `r Sys.Date()`)
+is available in the
+[list of available prescreeners](#prescreener-list).
+It also includes example code snippets for each prescreener and available constraints.
+**
+
+#### List of available  `prolific_prescreeners` {#prescreener-list}
+
+The following table contains **all** currently (as of `r Sys.Date()`) available prescreeners.
+The `prescreener title` is to be used in the `title` field of a `prolific_prescreener` object.
+
+***Click on the respective row to show all available constraints ***
+
+***Click on the respective constraint to show R-code for setting up the prescreener***
+<br></br>
+<br></br>
+<br></br>
+
+```{r, reactable_list_of_prescreeners, eval = TRUE, results = TRUE, show = FALSE,echo=FALSE,warning=FALSE,message=FALSE,error=FALSE}
+```
 
 
 ## Obtaining an API token {#get-token}
@@ -343,14 +421,22 @@ library(prolific.api)
 The **prolific.api** package requires 
 an 
 [API token](https://docs.prolific.co/docs/api-docs/public/#section/Authentication) 
-for accessing the API of 
+for accessing the 
+[API](https://docs.prolific.co/docs/api-docs/public)
+of 
 [prolific.co](https://www.prolific.co/).
-
-
 To get such a token, you first need a researcher account on 
 [prolific.co](https://www.prolific.co/).
-When logging in to this account, you can obtain the *workspace-specific* token
-by selecting the workspace you would like to work in, for which 
-the tokens can be managed in the `Settings -> Go to API token page` menu.
+When logging in to this account, you can obtain the 
+<!-- *workspace-specific*  -->
+token
+<!-- by selecting the workspace you would like to work in, 
+for which 
+the tokens can be managed  -->
+in the `Settings -> Go to API token page` menu.
 
 
+
+
+``` {r, delete-all-studies, eval = TRUE, include = FALSE,results = FALSE}
+```

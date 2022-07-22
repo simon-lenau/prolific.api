@@ -33,6 +33,12 @@
                 data.table::setDT(x)
                 return(invisible(NULL))
             }))
+            # Add list of studies as attribute for the corresponding prescreeners
+            list_of_studies <- tryCatch(getOption(".prolific.api.latest.working.access")$access(endpoint = "studies", method = "get"), error = function(e) NULL)
+            if (!is.null(list_of_studies)) {
+                previous_studies_requirements <- grep("previousstudies(allowlist)*", tolower(prescreeners_list$results$`_cls`))
+                prescreeners_list$results$attributes[previous_studies_requirements] <- lapply(previous_studies_requirements, function(i) list_of_studies)
+            }
             # Store list of prescreeners as data.table
             assign(
                 "prolific_prescreener_list",
@@ -46,6 +52,8 @@
                 ),
                 envir = .self$.internals
             )
+
+
             current_val <- tryCatch(
                 get("prolific_prescreener_list", envir = .self$.internals),
                 error = function(e) {

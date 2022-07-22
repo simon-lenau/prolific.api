@@ -32,6 +32,8 @@
 \alias{name<-}
 \alias{peripheral_requirements}
 \alias{peripheral_requirements<-}
+\alias{project}
+\alias{project<-}
 \alias{prolific_id_option}
 \alias{prolific_id_option<-}
 \alias{reward}

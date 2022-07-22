@@ -183,7 +183,13 @@
 #' @noRd
 .collapse_url_parameters <-
     function(url_parameters) {
-        return(paste0(names(url_parameters), "={", url_parameters, "}", collapse = "&"))
+        return(paste0(
+            names(url_parameters), "=",
+            ifelse(!tolower(names(url_parameters)) %in% "q_eed", "{", ""),
+            url_parameters,
+            ifelse(!tolower(names(url_parameters)) %in% "q_eed", "}", ""),
+            collapse = "&"
+        ))
     }
 
 #' Function to de-collapse URL parameters

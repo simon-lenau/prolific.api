@@ -28,8 +28,15 @@
             ))
         }
 
+        # if ((is_custom_study_list <- grepl("previousstudies(allowlist)*", tolower(requirement$cls)))) {
+        #     selection <- getOption(".prolific.api.latest.working.access")$access(endpoint = "studies", method = "get")
+        # } else {
         selection <- requirement$attributes[[1]]
-        selection$value <- NULL
+        # }
+
+        if ("value" %in% names(selection)) {
+            selection$value <- NULL
+        }
 
         if ((is_custom_list <- grepl("custom(black|white)list", tolower(requirement$cls))) & !(all(names(prolific_prescreener$constraints) %in% selection[1, ]$name))) {
             constraints <- list(c(names(prolific_prescreener$constraints)))
@@ -91,7 +98,9 @@
         }
 
         selection$target <- tolower(selection[[target_column_identifier]])
-        selection$label <- NULL
+        if ("label" %in% names(selection)) {
+            selection$label <- NULL
+        }
         selection <- data.table::as.data.table(selection)
 
         constraint_dt <- data.table::data.table(
@@ -193,7 +202,9 @@
 
     # Evaluate names which are enclosed in `eval()`
     eval_pos <- grep("eval\\(.*\\)", names(output))
-    names(output)[eval_pos] <- Reduce(c, lapply(eval_pos, function(sfdakljhsdadasfcxysfadnlk) eval(parse(text = names(output)[sfdakljhsdadasfcxysfadnlk]))))
-
+    names(output)[eval_pos] <-
+        Reduce(c, lapply(eval_pos, function(sfdakljhsdadasfcxysfadnlk) {
+            eval(parse(text = names(output)[sfdakljhsdadasfcxysfadnlk]))
+        }))
     return(output)
 }

@@ -182,6 +182,15 @@ NULL
 NULL
 
 #' @rdname prolific_study
+#' @name project
+#' @export project
+NULL
+#' @rdname prolific_study
+#' @name project<-
+#' @export project<-
+NULL
+
+#' @rdname prolific_study
 #' @name prolific_id_option
 #' @export prolific_id_option
 NULL
