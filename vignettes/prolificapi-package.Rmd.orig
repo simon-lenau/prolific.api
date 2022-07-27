@@ -217,10 +217,7 @@ Participant compensation is then based on the completion code by checking
 whether a participant obtained the correct completion code
 after completing the study. The compensation does not happen automatically, so you still can check which participants are compensated, e.g. in case of erroneous completion codes.
 
-The above fields are the ones that need to be set in a minimal study specification.
-For an exhaustive overview of the fields in a  `prolific_study`, see the
-*[section on methods and fields access](#styles)*
-and the documentation `help(prolific_study)`.   
+
 
 <!-- #### Validity-Check for a `prolific_study`
 

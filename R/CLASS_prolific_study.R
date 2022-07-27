@@ -282,6 +282,7 @@ prolific_study <- setRefClass(
             if (!(missing(value))) {
                 if (length(class(value)) == 1 & all(class(value) == "list")) {
                     class(value) <- c(class(value), "eligibility_requirements")
+                    names(value) <- vapply(value, function(x) x$title, "a")
                 }
             }
 

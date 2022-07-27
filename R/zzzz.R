@@ -234,3 +234,35 @@ NULL
 #' @export validity_check
 NULL
 
+#--------------------------------------------------
+# prolific_prescreener
+
+#------------------------------
+## prolific_prescreener -- Fields
+
+#' @rdname prolific_prescreener
+#' @name title
+#' @export title
+NULL
+#' @rdname prolific_prescreener
+#' @name title<-
+#' @export title<-
+NULL
+
+#' @rdname prolific_prescreener
+#' @name constraints
+#' @export constraints
+NULL
+#' @rdname prolific_prescreener
+#' @name constraints<-
+#' @export constraints<-
+NULL
+
+#------------------------------
+## prolific_prescreener -- Methods
+
+#' @rdname prolific_prescreener
+#' @name validity_check
+#' @export validity_check
+NULL
+

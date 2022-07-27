@@ -19,6 +19,9 @@ export <- c(
     ),
     .expose_S4(
         "prolific_study"
+    ),
+    .expose_S4(
+        "prolific_prescreener"
     )
 )
 
@@ -29,3 +32,41 @@ tryCatch(writeLines(.write_S4_documentation(export,
     # return(invisible(NULL))
     stop(e)
 })
+
+rm(export)
+
+
+# output_fun <- function(x, obj_name = "x") {
+#     colsep <- " | "
+#     head <- paste0(
+#         colsep,
+#         "Field / Method",
+#         colsep,
+#         "`RefClass`",
+#         colsep,
+#         "`S4`",
+#         colsep
+#     )
+#     headsep <- paste0(c(rep(paste0(colsep, ":---"), 3), colsep), collapse = "")
+#     fields <- paste0(
+#         colsep,
+#         x$fields,
+#         colsep,
+#         obj_name, "$", x$fields,
+#         colsep,
+#         x$fields, "(", obj_name, ")",
+#         colsep
+#     )
+#     methods <- paste0(
+#         colsep,
+#         x$methods,
+#         colsep,
+#         obj_name, "$", x$methods, "(...)",
+#         colsep,
+#         x$methods, "(", obj_name, ")",
+#         colsep
+#     )
+#     cat(paste0(c(head, headsep, fields, methods), collapse = "\n"), "\n")
+# }
+
+# output_fun(export$api_access, obj_name = "api_access_object")
