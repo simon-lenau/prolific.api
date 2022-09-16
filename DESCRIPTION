@@ -12,6 +12,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 Suggests: 
     BiocStyle,
+    htmltools,
     knitr,
+    reactable,
     rmarkdown
 VignetteBuilder: knitr

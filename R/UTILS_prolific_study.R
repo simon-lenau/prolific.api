@@ -28,13 +28,13 @@
                 description = prolific_study$description,
                 device_compatibility = prolific_study$device_compatibility,
                 eligibility_requirements =
-                    lapply(prolific_study$eligibility_requirements, function(requirement) {
+                    unname(lapply(prolific_study$eligibility_requirements, function(requirement) {
                         if (class(requirement) %in% c("prolific_prescreener")) {
                             requirement$.internals$methods$output(prescreeners)
                         } else {
                             stop(paste0("Trying to pass prescreeners of class '", class(requirement), "' failed.\n\tPlease use class 'prolific_prescreener' only.\n"))
                         }
-                    }),
+                    })),
                 estimated_completion_time = prolific_study$estimated_completion_time,
                 external_study_url = paste0(
                     prolific_study$external_study_url,

@@ -42,7 +42,7 @@
 \alias{total_available_places<-}
 \alias{url_parameters}
 \alias{url_parameters<-}
-\alias{validity_check}
+\alias{validity_check-prolific_study}
 \title{Prolific study}
 \description{
 Class that represents Prolific studies, such that they can be transferred to or from the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}.

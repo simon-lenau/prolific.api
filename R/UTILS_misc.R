@@ -12,6 +12,10 @@
         return(paste0("\"", c(...), "\""))
     }
 
+
+
+
+
 #' Function to paste and run commands in system shell
 #'
 #' @param ...
@@ -32,7 +36,8 @@
                 {
                     system(
                         cmd,
-                        intern = TRUE
+                        intern = TRUE # ,
+                        # ignore.stdout = getOption("prolific.api_ignore.stdout", default = TRUE)
                     )
                 },
                 error = function(e) {
@@ -185,13 +190,13 @@
     function(url_parameters) {
         return(paste0(
             names(url_parameters), "=",
-            ifelse(!tolower(names(url_parameters)) %in% "q_eed", "{", ""),
+            ifelse(!tolower(names(url_parameters)) %in% "q_eed", "{", "{"),
             url_parameters,
-            ifelse(!tolower(names(url_parameters)) %in% "q_eed", "}", ""),
+            ifelse(!tolower(names(url_parameters)) %in% "q_eed", "}", "}"),
             collapse = "&"
         ))
     }
-
+# collapsed_url_parameters <- gsub("(.*?)\\?(.*)", "\\2", external_study_url)
 #' Function to de-collapse URL parameters
 #'
 #' @param collapsed_url_parameters
@@ -203,7 +208,7 @@
 .decollapse_url_parameters <-
     function(collapsed_url_parameters) {
         x <- strsplit(collapsed_url_parameters, "&")[[1]]
-        output <- as.list(gsub("(.*)=\\{(.*?)\\}", "\\2", x))
+        output <- as.list(gsub("(.+)=\\{(.*?)\\}", "\\2", x))
         names(output) <- gsub("(.*)=\\{(.*?)\\}", "\\1", x)
         return(output)
     }

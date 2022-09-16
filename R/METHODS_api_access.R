@@ -66,8 +66,6 @@
 #' @export
 NULL
 
-
-
 api_access$methods(
     show =
         function(hide_token = TRUE) {
@@ -89,7 +87,6 @@ api_access$methods(
 
             indent <- "    "
             nchars_sub <- 10 # max(nchar(names(accessors)))
-
 
             # Output token
             cat("\nAPI token:\n")
@@ -153,7 +150,6 @@ api_access$methods(
                 collapse = "\n"
             ), "\n")
 
-
             cat("\n")
 
             # Output entrypoint
@@ -193,7 +189,8 @@ api_access$methods(
         function(endpoint,
                  method = c("get", "post", "patch", "put", "delete"),
                  data = NULL,
-                 as_list = TRUE) {
+                 as_list = TRUE,
+                 silent = TRUE) {
             # "
             #     Method for accessing the API.
             #     \\subsection{Parameters}{
@@ -234,9 +231,16 @@ api_access$methods(
             # consisting of acces method, header (data and authorization) and endpoint
             output <- .format_output(
                 .execute(
-                    accessors[[tolower(method)]],
+                    paste0(
+                        accessors[[tolower(method)]],
+                        ifelse(silent, " -s", "")
+                    ),
                     " ",
-                    .format_input(data, list_of_prescreeners = if (any(class(data) %in% c("prolific_study", "eligibility_requirements"))) .self$.internals$methods$prescreeners() else NULL),
+                    .format_input(data, list_of_prescreeners = if (any(class(data) %in% c("prolific_study", "eligibility_requirements"))) {
+                        .self$.internals$methods$prescreeners()
+                    } else {
+                        NULL
+                    }),
                     " ",
                     .self$.internals$api_authorization,
                     " ",
@@ -247,13 +251,11 @@ api_access$methods(
                 as_list = as_list || (class(data) %in% c("prolific_study"))
             )
 
-
             # Convert the entpoint link to check the endpoint
 
             link_split <- strsplit(
                 .make_url(c(endpoint)), "/"
             )[[1]]
-
 
             if (method == "get" && link_split[length(link_split)] == "studies") {
                 output <- output$results
@@ -261,7 +263,6 @@ api_access$methods(
                     "publish_at", "is_pilot", "is_underpaying", "reward_level",
                     "quota_requirements", "is_reallocated"
                 ))] <- NULL
-
 
                 output$date_created <-
                     as.POSIXct(output$date_created, format = "%Y-%m-%dT%H:%M:%S")
@@ -273,11 +274,28 @@ api_access$methods(
 
                 data.table::setDT(output)
 
+                if (nrow(output) == 0) {
+                    output <-
+                        data.table::data.table(
+                            "creation_day" = integer(1),
+                            "creation_time" = integer(1),
+                            "internal_name" = character(1),
+                            "name" = character(1),
+                            "id" = character(1),
+                            "study_type" = character(1),
+                            "total_available_places" = integer(1),
+                            "places_taken" = integer(1),
+                            "reward" = integer(1),
+                            "status" = character(1),
+                            "number_of_submissions" = integer(1),
+                            "total_cost" = double(1),
+                            "privacy_notice" = character(1)
+                        )[0, ]
+                }
+
                 data.table::setcolorder(output, c("creation_day", "creation_time", "internal_name", "name"))
                 data.table::setkeyv(output, c("creation_day", "creation_time"))
             }
-
-
 
             # Check if output is a Prolific study, and return it as the respective class
 

@@ -38,18 +38,22 @@
             selection$value <- NULL
         }
 
-        if ((is_custom_list <- grepl("custom(black|white)list", tolower(requirement$cls))) & !(all(names(prolific_prescreener$constraints) %in% selection[1, ]$name))) {
-            constraints <- list(c(names(prolific_prescreener$constraints)))
+        if ((is_custom_list <- grepl("custom(black|white)list", tolower(requirement$cls)))) {
+            constraints <- list(as.list(names(unlist(prolific_prescreener$constraints))))
             names(constraints) <- selection[1, ]$name
             constraints[[1]] <- constraints[[1]][vapply(prolific_prescreener$constraints, function(x) x != "FALSE", TRUE)]
         } else {
             constraints <- prolific_prescreener$constraints
         }
 
+        # if ((is_custom_list <- grepl("custom(black|white)list", tolower(requirement$cls)))) {
+        #     names(constraints) <- gsub("_", "", names(constraints))
+        #     selection$name <- gsub("_", "", selection$name)
+        # }
+
         target_column_identifier <- vapply(selection, function(x) {
             mean(tolower(names(constraints)) %in% tolower(x))
         }, 1.0)
-
 
         if (!"name" %in% names(target_column_identifier)) {
             target_column_identifier <- c(target_column_identifier, name = 0)
@@ -116,11 +120,11 @@
 
         col_order <- unique(c(target_column_identifier, "name", "label", "id", "value", "index"))
 
-        selection <- selection[, col_order[col_order %in% names(selection)]]
+        selection <- selection[col_order[col_order %in% names(selection)]]
+
         if ("index" %in% names(selection)) {
             data.table::setkeyv(selection, "index")
         }
-
 
         return(
             list(

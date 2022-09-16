@@ -11,11 +11,12 @@
 \alias{screening}
 \alias{eligibility_requirements}
 \alias{requirements}
+\alias{validity_check}
 \alias{title}
 \alias{title<-}
 \alias{constraints}
 \alias{constraints<-}
-\alias{validity_check}
+\alias{validity_check-prolific_prescreener}
 \title{Prolific prescreening requirement}
 \description{
 Class that represents prescreening requirements to characterize the participants to be selected for a certain \code{\link[=prolific_study]{study on Prolific}},

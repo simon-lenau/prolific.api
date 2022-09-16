@@ -1,5 +1,7 @@
+
 #--------------------------------------------------
 # api_access
+
 
 #------------------------------
 ## api_access -- Fields
@@ -31,6 +33,7 @@ NULL
 #' @export entrypoint<-
 NULL
 
+
 #------------------------------
 ## api_access -- Methods
 
@@ -49,8 +52,10 @@ NULL
 #' @export prescreeners
 NULL
 
+
 #--------------------------------------------------
 # prolific_study
+
 
 #------------------------------
 ## prolific_study -- Fields
@@ -226,16 +231,27 @@ NULL
 #' @export url_parameters<-
 NULL
 
+
 #------------------------------
 ## prolific_study -- Methods
 
 #' @rdname prolific_study
-#' @name validity_check
+#' @name validity_check-prolific_study
 #' @export validity_check
 NULL
 
+
 #--------------------------------------------------
 # prolific_prescreener
+
+
+#------------------------------
+## prolific_prescreener -- non-unique fields or methods
+
+#' @rdname prolific_prescreener
+#' @name validity_check
+#' @export validity_check
+NULL
 
 #------------------------------
 ## prolific_prescreener -- Fields
@@ -258,11 +274,12 @@ NULL
 #' @export constraints<-
 NULL
 
+
 #------------------------------
 ## prolific_prescreener -- Methods
 
 #' @rdname prolific_prescreener
-#' @name validity_check
+#' @name validity_check-prolific_prescreener
 #' @export validity_check
 NULL
 

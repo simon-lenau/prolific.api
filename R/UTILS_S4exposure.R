@@ -32,8 +32,6 @@
         methods::setMethod(method, class, definition)
     }
 
-
-
 # Function for exporting all RefClass methods as S4 methods
 .exposeMethods_S4 <-
     function(class,
@@ -76,7 +74,6 @@
 
         return(methods)
     }
-
 
 .exposeFields_S4 <-
     function(class,
@@ -134,13 +131,26 @@
 
 # methods <- export
 # Wrapper function for writing documentation and export statements for the S4 methods
+
+methods <- list("a" = list(fields = "x"), b = list(fields = "x"))
+
 .write_S4_documentation <-
     function(methods,
              exclude = NULL) {
-        output <- NULL
+        dupl_names <-
+            unlist(methods, recursive = TRUE)
+
+        dupl_names <-
+            dupl_names[duplicated(dupl_names)]
+
+        alias_pos <-
+            gsub("\\..*", "", names(dupl_names))
+
+        output <-
+            NULL
 
         sepfun <- function(i) {
-            paste0("#", paste0(rep("-", i), collapse = ""))
+            paste0("\n#", paste0(rep("-", i), collapse = ""))
         }
         i <- 1
         for (i in 1:length(methods)) {
@@ -149,12 +159,43 @@
                 sepfun(50),
                 paste0("# ", names(methods)[i]),
                 "",
+                if (length(add_aliases <-
+                    which(alias_pos == names(methods)[i])) > 0) {
+                    paste0(
+                        sepfun(30),
+                        "\n",
+                        paste0("## ", names(methods)[i], " -- non-unique fields or methods"),
+                        "\n\n",
+                        paste0(
+                            "#' @rdname ", names(methods)[i],
+                            "\n",
+                            "#' @name ", dupl_names[add_aliases],
+                            "\n",
+                            "#' @export ", dupl_names[add_aliases],
+                            "\nNULL"
+                        )
+                    )
+                },
                 sepfun(30),
                 paste0("## ", names(methods)[i], " -- Fields"),
                 "",
-                .document_export_S4_method(methods[[i]]$fields, names(methods)[i],
+                .document_export_S4_method(
+                    methods[[i]]$fields,
+                    names(methods)[i],
                     assignment = TRUE,
-                    append = ifelse(methods[[i]]$fields %in% exclude, "-field", "")
+                    append =
+                        paste0(
+                            ifelse(
+                                methods[[i]]$fields %in% dupl_names,
+                                paste0("-", names(methods)[i]),
+                                ""
+                            ),
+                            ifelse(
+                                methods[[i]]$fields %in% exclude,
+                                "-field",
+                                ""
+                            )
+                        )
                 ),
                 sepfun(30),
                 paste0("## ", names(methods)[i], " -- Methods"),
@@ -162,7 +203,19 @@
                 .document_export_S4_method(
                     methods[[i]]$methods,
                     names(methods)[i],
-                    append = ifelse(methods[[i]]$methods %in% exclude, "-method", "")
+                    append =
+                        paste0(
+                            ifelse(
+                                methods[[i]]$methods %in% dupl_names,
+                                paste0("-", names(methods)[i]),
+                                ""
+                            ),
+                            ifelse(
+                                methods[[i]]$methods %in% exclude,
+                                "-method",
+                                ""
+                            )
+                        )
                 )
             )
         }
@@ -172,3 +225,48 @@
             collapse = "\n"
         ))
     }
+
+
+
+
+# Worker function that ensures that names / aliases in .Rd files are unique
+# .rename_duplicates <-
+# function(x) {
+#     flat <-
+#         unlist(x, recursive = TRUE)
+
+#     replace <-
+#         flat[flat %in% flat[duplicated(flat)]]
+
+#     replace_pos <-
+#         gsub("\\.", "$", names(replace))
+
+#     for (i in 1:length(replace)) {
+#         pos <-
+#             paste0("x$", replace_pos[i])
+
+#         eval(
+#             parse(
+#                 text =
+#                     paste0(
+#                         "{\n\t",
+#                         "ind <- which(", pos, "%in%", "'", replace[i], "'", ")",
+#                         "\n\t",
+#                         pos,
+#                         "[ind]",
+#                         " <- ",
+#                         "paste0(",
+#                         pos,
+#                         "[ind]",
+#                         ",",
+#                         "'-",
+#                         gsub("\\$", "-", gsub("\\$(methods|fields)", "", replace_pos[i])),
+#                         "'",
+#                         ")",
+#                         "\n}"
+#                     )
+#             )
+#         )
+#     }
+#     return(x)
+# }

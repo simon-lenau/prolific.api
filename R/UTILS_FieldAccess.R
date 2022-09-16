@@ -56,11 +56,9 @@
             value_attribute <- "NULL"
         }
 
-
         if (field_attribute == "") {
             field_attribute <- "NULL"
         }
-
 
         # Check whether restriction is met, and return corresponding error message if it is not
         if (!all(all.equal(value_attribute, field_attribute) == TRUE)) {

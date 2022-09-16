@@ -265,7 +265,6 @@ NULL
 #' @export
 NULL
 
-
 #' @exportClass prolific_study
 #' @export prolific_study
 prolific_study <- setRefClass(
@@ -282,7 +281,11 @@ prolific_study <- setRefClass(
             if (!(missing(value))) {
                 if (length(class(value)) == 1 & all(class(value) == "list")) {
                     class(value) <- c(class(value), "eligibility_requirements")
-                    names(value) <- vapply(value, function(x) x$title, "a")
+                }
+                if (!is.null(value)) {
+                    if (length(value) > 0) {
+                        names(value) <- vapply(value, function(x) x$title, "a")
+                    }
                 }
             }
 
@@ -386,7 +389,10 @@ prolific_study <- setRefClass(
                 url_parameters <<- url_parameters
 
                 further_fields <<- list(...)
-
+                # print(external_study_url)
+                # external_study_url <-
+                #     "https://cispa.qualtrics.com/jfe/form/SV_50y2U6HvCs7ljaC?prolific_id={{%PROLIFIC_PID%}}&study_id={{%STUDY_ID%}}&session_id={{%SESSION_ID%}}&Q_EED=eyJrZWx0IjpbIjQ4eGlnIl0sIm1nb3giOlsiN3Fnb2giXSwiZGltdSI6WyIyaXRidyJdLCJsZWZpIjpbInhjajltIl0sIm9xYWoiOlsiZmJxOWsiXSwic1llYXIiOlsiMjAyMiJdLCJzTW9udGgiOlsiMDgiXSwic0RheSI6WyIwOCJdLCJzSG91ciI6WyIxNiJdLCJzTWluIjpbIjA2Il19"
+                # url_parameters <- NULL
                 # Convert URL parameters that are already part of the URL
                 if (!is.null(external_study_url)) {
                     # (as Prolific does not return URL and parameters separately)

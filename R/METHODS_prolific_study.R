@@ -39,7 +39,6 @@ prolific_study$methods(
             "reward"
         )
 
-
         nchars <- max(nchar(output_fields))
 
         sep <- paste0(rep("=", getOption("width")), collapse = "")
@@ -127,8 +126,6 @@ prolific_study$methods(
                     return(FALSE)
                 }
             }, TRUE))
-
-
 
             if (length(add_pos) > 0) {
                 add_msgs <- lapply(eligibility_checks[add_pos], function(x) {

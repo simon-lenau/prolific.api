@@ -53,7 +53,6 @@
                 envir = .self$.internals
             )
 
-
             current_val <- tryCatch(
                 get("prolific_prescreener_list", envir = .self$.internals),
                 error = function(e) {

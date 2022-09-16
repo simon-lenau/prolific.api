@@ -6,6 +6,8 @@ output:
   BiocStyle::html_document:
     toc: true
 vignette: >
+  %\VignetteDepends{htmltools}
+  %\VignetteDepends{reactable}
   %\VignetteIndexEntry{The prolific.api package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
@@ -28,29 +30,26 @@ knitr::opts_chunk$set(
   out.width = "60%",
   fig.align = "center"
 )
-library(lenau)
 library(prolific.api)
 library(data.table)
 library(reactable)
-library(ggthemes)
 ```
 
-<!-- Read the code chunks to be used -->
 ```{r, include=FALSE, cache=FALSE,eval=TRUE}
 knitr::read_chunk(
-  "prolificapi-package-chunks.R"
+  "./_prolificapi-package-chunks.R"
 )
 ```
 
 ```{r, include=FALSE, cache=FALSE,eval=TRUE}
 knitr::read_chunk(
-  "list_prescreeners.R"
+  "_list_prescreeners.R"
 )
 ```
 
 ```{r, include=FALSE, cache=FALSE,eval=TRUE}
 knitr::read_chunk(
-  "list_fields_methods.R"
+  "_list_fields_methods.R"
 )
 ```
 
