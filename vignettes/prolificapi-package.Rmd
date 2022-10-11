@@ -182,6 +182,9 @@ There are a lot of options to be chosen from when setting up such a study, but l
 
 A minimal specification for creating a `prolific_study` contains the following information:
 
+```{r,participant-id-prescreener, eval = TRUE,include=FALSE}
+```
+
 ```{r, study-create-simple, eval = TRUE}
 ```
 
@@ -196,12 +199,24 @@ contains the study's
 - **reward** and
 - **total available places**.
 
-To them, the study will then will be presented as:
+To them, the study will then will be presented as
 
-![Preview of the Prolific Study](Study_Preview.jpg){width=100%}  
+```{r, echo=FALSE,eval=TRUE, fig.cap="Dashboard summary of the Prolific Study", out.width = '85%', fig.align='center'}
+knitr::include_graphics(paste0(getwd(), "/", "Study_Preview_dashboard.jpg"))
+```
+
+in the dashboard. Once they select the study in the dashboard, more details are shown:
+
+```{r, echo=FALSE,eval=TRUE, fig.cap="Details of the Prolific Study", out.width = '85%', fig.align='center'}
+knitr::include_graphics(paste0(getwd(), "/", "Study_Preview.jpg"))
+```
 
 
-People deciding to take part in a study can click on "Open study link in a new window", which redirects them
+
+
+
+
+People deciding to take part in a study can click on "Take part in this study", which redirects them
 to the
 
 - **external study url**
@@ -411,7 +426,7 @@ study's `eligibility_requirements` field, as described
 (see the 
 *[section on updating fields in a `prolific_study`](#studies_fields_update)*
 ).
-For example, the age requirement of `new_study_with_prescreeners` can be relaxed to allow for
+For example, the age requirement specified for `new_study_with_prescreeners` can be relaxed to allow for
 participants between the ages of `18` and `28`:
 ```{r, study-modify-prescreener-age, eval = TRUE, results = TRUE}
 ```

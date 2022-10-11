@@ -62,12 +62,12 @@ The endpoint to access. If this is a vector, its elements are collapsed by \code
 \item{\code{method}}{(\code{\link[=character]{character}}):}\cr
 The method to use. One of \code{get, post, place, patch and delete}.
 The commands associated with each method are defined in the \code{\link[=api_access]{accessors}} field of the \code{\link[=api_access]{api_access}} object.
-\item{\code{data}}{(\code{\link[jsonlite:toJSON]{json string}}, \code{\link[jsonlite:toJSON]{json file}}, \code{\link[=list]{list}}, \code{\link[=prolific_study]{prolific_study object}} or \code{\link[=NULL]{NULL}} }\cr
+\item{\code{data}}{(\code{\link[jsonlite:toJSON]{json string}}, \code{\link[jsonlite:toJSON]{json file}}, \code{\link[=list]{list}}, \code{\link[=prolific_study]{prolific_study object}} or \code{\link[=NULL]{NULL}})}\cr
 The data to be transfered in the body of the \href{https://docs.prolific.co/docs/api-docs/public/}{API} call.
 R-objects are converted to a \code{\link[jsonlite:toJSON]{json string}} using \code{\link[jsonlite:toJSON]{jsonlite:toJSON}} .
 \code{\link[=NULL]{NULL}} means that no data is transfered.
 \item{\code{as_list}}{(\code{\link[=logical]{logical}}):}\cr
-Whether the return of the \href{https://docs.prolific.co/docs/api-docs/public/}{API} call should be converted to a list or prolific_study object,
+Whether the return of the \href{https://docs.prolific.co/docs/api-docs/public/}{API} call should be converted to a list or (if applicable) \link[=prolific_study]{prolific_study} object,
 rather than returned as the raw \code{\link[jsonlite:toJSON]{json string}}.
 }
 }

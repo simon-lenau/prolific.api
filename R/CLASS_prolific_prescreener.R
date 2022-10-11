@@ -6,12 +6,12 @@
 #'
 #' @description
 #' Class that represents prescreening requirements to characterize the participants to be selected for a certain \code{\link[=prolific_study]{study on Prolific}},
-#' i.e. the person's to be recruited via Prolific.
+#' i.e. the persons to be recruited via Prolific.
 #' \code{\link[=prolific_prescreener]{prolific_prescreener objects}} are therefore mainly used in the
-#' \code{\link[=prolific_study]{eligibility_requirements}} of a \code{\link{prolific_study}}.\cr
+#' \code{\link[=prolific_study]{eligibility_requirements}} field of \code{\link[=prolific_study]{prolific_studys}}.\cr
 #' \emph{The fields and methods are available as in RefClass or S4 objects (see examples).}
 #'
-#' The section \emph{'Setting up prescreeners for Prolific'} below provides an overview and examples of how to set prescreening requirements.
+#' The section \emph{'Setting up prescreeners for Prolific'} below provides an overview and examples of how to specify prescreening requirements.
 #'
 #' @field title (\code{\link[=character]{character}}):\cr
 #' A \emph{valid} title for a single prescreener that is available on the Prolific platform.

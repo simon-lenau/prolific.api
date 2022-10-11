@@ -5,7 +5,7 @@
 #' @section Methods:
 #'
 #' ## \code{validity_check}
-#' Check whether the prescreener is valid in terms of the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}\cr
+#' Check whether the prescreener is valid in terms of the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}.\cr
 #' \strong{Note:} For checking a prescreener's validity, an \code{\link[=api_access]{api_access object}} that passes \code{\link[=api_access]{check_authorization()}} needs to be available.
 #' It suffices if any such \code{\link[=api_access]{api_access object}} is specified, since the reference to it is determined automatically.
 #'

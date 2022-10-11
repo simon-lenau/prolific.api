@@ -20,12 +20,12 @@
 \title{Prolific prescreening requirement}
 \description{
 Class that represents prescreening requirements to characterize the participants to be selected for a certain \code{\link[=prolific_study]{study on Prolific}},
-i.e. the person's to be recruited via Prolific.
+i.e. the persons to be recruited via Prolific.
 \code{\link[=prolific_prescreener]{prolific_prescreener objects}} are therefore mainly used in the
-\code{\link[=prolific_study]{eligibility_requirements}} of a \code{\link{prolific_study}}.\cr
+\code{\link[=prolific_study]{eligibility_requirements}} field of \code{\link[=prolific_study]{prolific_studys}}.\cr
 \emph{The fields and methods are available as in RefClass or S4 objects (see examples).}
 
-The section \emph{'Setting up prescreeners for Prolific'} below provides an overview and examples of how to set prescreening requirements.
+The section \emph{'Setting up prescreeners for Prolific'} below provides an overview and examples of how to specify prescreening requirements.
 }
 \section{Fields}{
 
@@ -245,7 +245,7 @@ To exclusively recruit participants from these studies, use
 
 \subsection{\code{validity_check}}{
 
-Check whether the prescreener is valid in terms of the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}\cr
+Check whether the prescreener is valid in terms of the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}.\cr
 \strong{Note:} For checking a prescreener's validity, an \code{\link[=api_access]{api_access object}} that passes \code{\link[=api_access]{check_authorization()}} needs to be available.
 It suffices if any such \code{\link[=api_access]{api_access object}} is specified, since the reference to it is determined automatically.
 \subsection{\strong{Return Value}}{
