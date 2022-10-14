@@ -85,11 +85,16 @@
         # format it as list
 
         if (any(class(data) %in% "prolific_study")) {
-            data <- data$.internals$methods$output(list_of_prescreeners)
+            data <-
+                data$.internals$methods$output(list_of_prescreeners)
         }
 
         if (any(class(data) %in% "eligibility_requirements")) {
-            data <- list(eligibility_requirements = lapply(data, function(x) x$.internals$methods$output(list_of_prescreeners)))
+            data <-
+                list(
+                    eligibility_requirements =
+                        lapply(data, function(x) x$.internals$methods$output(list_of_prescreeners))
+                )
         }
 
         return(
@@ -97,9 +102,13 @@
                 "-d '",
                 if (!data_file) {
                     # Convert data to JSON format if it is not a file
-                    jsonlite::toJSON(
-                        data,
-                        auto_unbox = TRUE
+                    gsub(
+                        "'",
+                        "\\'",
+                        jsonlite::toJSON(
+                            data,
+                            auto_unbox = TRUE
+                        )
                     )
                 } else {
                     # Add data file path

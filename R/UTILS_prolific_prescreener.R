@@ -13,7 +13,10 @@
     function(prolific_prescreener,
              prolific_prescreener_list) {
         requirement <- prolific_prescreener_list[prolific_prescreener_list$title %in% prolific_prescreener$title, ]
-
+        # cat("requirement:\n")
+        # print(requirement)
+        # cat("prolific_prescreener_list:\n")
+        # print(prolific_prescreener_list)
         if (nrow(requirement) > 1) {
             stop(paste0(
                 "Non-unique prescreener title: ", prolific_prescreener$title, "!\n",
@@ -52,12 +55,14 @@
         # }
 
         target_column_identifier <- vapply(selection, function(x) {
-            mean(tolower(names(constraints)) %in% tolower(x))
+            mean((tolower(names(constraints)) %in% tolower(x)))
         }, 1.0)
 
         if (!"name" %in% names(target_column_identifier)) {
             target_column_identifier <- c(target_column_identifier, name = 0)
         }
+
+
 
         if (target_column_identifier["name"] == 1) {
             target_column_identifier <- "name"

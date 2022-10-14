@@ -14,23 +14,35 @@ params:
   EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
 ---
 
-
-
-
-
-
-
-
-
-
-```{r, include = FALSE, cache = FALSE, eval = TRUE}
+```{r, include=FALSE, cache=FALSE,eval=TRUE}
 knitr::read_chunk(
-	"_R_setup.R"
+  "./_R_setup.R"
 )
-```{r, r_setup, eval = TRUE, include = FALSE, echo = FALSE}
 ```
 
+```{r, include=FALSE, cache=FALSE,eval=TRUE}
+knitr::read_chunk(
+  "./_prolificapi-package-chunks.R"
+)
+```
 
+```{r, include=FALSE, cache=FALSE,eval=TRUE}
+knitr::read_chunk(
+  "_list_prescreeners.R"
+)
+```
+
+```{r, include=FALSE, cache=FALSE,eval=TRUE}
+knitr::read_chunk(
+  "_list_fields_methods.R"
+)
+```
+
+``` {r, r_setup, eval = TRUE, include = TRUE, echo=FALSE}
+```
+
+```{r start-date, include = FALSE,eval=TRUE}
+```
 
 
 
@@ -90,25 +102,17 @@ to exchange (retrieve and submit) information with the API.
 
 An `api_access` object can be created by 
 
-
-```r
-prolific_api_access <- api_access(api_token = "<api_token>")
+```{r,access-create-anon, eval = FALSE}
 ```
 While all other settings when creating an `api_access` rarely require adjustment,
 the `api_token` is the information that **needs to be specified** for the API access to work.
 The `prolific.api` package's functionality heavily depends on a a valid `api_token`.
 Therefore, the above command prints a console message to indicate that the token is valid:
-
-```
-#> API token status: valid
-#> 	 API access successful!
+``` {r, access-create, eval = TRUE, include = TRUE, echo = FALSE}
 ```
 The token's validity can also be checked by means of the `check_authorization` method, which
 returns `TRUE` if the token is valid, and `FALSE` if it is not:
-
-```r
-prolific_api_access$check_authorization()
-#> [1] TRUE
+```{r, access_check_authorization, eval = TRUE,include=TRUE}
 ```
 
 The 
@@ -138,28 +142,14 @@ By default, file transfer is based on [curl](https://curl.se/).
 For retrieving information from [prolific.co](https://www.prolific.co/) using the `get` method,
 a simple example is
 
-
-```r
-prolific_api_access$access(
-  method = "get",
-  endpoint = "users/me"
-)
+```{r, access_get, eval = FALSE, include = TRUE}
 ```
 to obtain information about the account you are accessing the API with.
 
 
 A simple example for submitting information to the API using the `post` method is
 
-
-```r
-prolific_api_access$access(
-  endpoint = "study-cost-calculator",
-  method = "post",
-  data = list(
-    reward = 100,
-    total_available_places = 5
-  )
-)
+```{r,access_post, eval = FALSE, include = TRUE}
 ```
 
 to calculate the cost  (including fees and taxes)  of a study where `5` participants are paid `1` £ each.
@@ -180,27 +170,10 @@ There are a lot of options to be chosen from when setting up such a study, but l
 
 A minimal specification for creating a `prolific_study` contains the following information:
 
+```{r,participant-id-prescreener, eval = TRUE,include=FALSE}
+```
 
-
-
-```r
-new_study <- prolific_study(
-  # Information shown to participants
-  name = "<Publicly visible study name>",
-  description = "<Publicly visible study description>",
-  estimated_completion_time = 1,
-  reward = 10,
-  # URL participants are redirected to
-  external_study_url = "https://www.link_to_my_study.com",
-  # Completion code to verify participation
-  completion_code = "123",
-  # Number of participants to recruit
-  total_available_places = 10,
-  eligibility_requirements =
-    list(
-      participant_id_prescreener
-    )
-)
+```{r, study-create-simple, eval = TRUE}
 ```
 
 
@@ -216,11 +189,15 @@ contains the study's
 
 To them, the study will then will be presented as
 
-<img src="Study_Preview_dashboard.jpg" title="Dashboard summary of the Prolific Study" alt="Dashboard summary of the Prolific Study" width="85%" style="display: block; margin: auto;" />
+```{r, echo=FALSE,eval=TRUE, fig.cap="Dashboard summary of the Prolific Study", out.width = '85%', fig.align='center'}
+knitr::include_graphics(paste0(getwd(), "/", "Study_Preview_dashboard.jpg"))
+```
 
 in the dashboard. Once they select the study in the dashboard, more details are shown:
 
-<img src="Study_Preview.jpg" title="Details of the Prolific Study" alt="Details of the Prolific Study" width="85%" style="display: block; margin: auto;" />
+```{r, echo=FALSE,eval=TRUE, fig.cap="Details of the Prolific Study", out.width = '85%', fig.align='center'}
+knitr::include_graphics(paste0(getwd(), "/", "Study_Preview.jpg"))
+```
 
 
 
@@ -254,19 +231,15 @@ created on [prolific.co](https://www.prolific.co/). To make sure that all necess
 have been set, the `validity_check` method can be used.
 In case a study has all required information, it simply returns `TRUE`:
 
-
-```r
+``` {r eval = TRUE}
 validity_check(new_study)
-#> standardGeneric("validity_check")
 ```
 
 In cases where a study lacks some of the information, it returns a message that guides through the required steps:
 
-
-```r
+``` {r eval = TRUE}
 new_study_without_information <- prolific_study()
 validity_check(new_study_without_information)
-#> standardGeneric("validity_check")
 ```
 
 (note that the `estimated_completion_time`, `reward` and `total_available_places` 
@@ -283,27 +256,10 @@ To submit the `new_study` created above to the Prolific platform,
 we use 
 
 
-
-```r
-prolific_api_access$access(
-  endpoint = "studies",
-  method = "post",
-  data = new_study
-)
-#> ======================================================================
-#> Prolific study summary:
-#> ======================================================================
-#> name:                      <Publicly visible study name>
-#> internal_name:             
-#> id:                        63497a134a19facd888bb939
-#> project:                   61f12ae112c02bba9e3523b1
-#> external_study_url:        https://www.link_to_my_study.com
-#> total_available_places:    10
-#> reward:                    10
-#> ======================================================================
+``` {r, study-post-simple, eval = TRUE, show = TRUE}
 ```
 
-The output shows that the study has been assigned an `id` (`"63497a134a19facd888bb939"` in this case).
+The output shows that the study has been assigned an `id` (`"`r new_study$id`"` in this case).
 This `id` is determined by [prolific.co](https://www.prolific.co/), 
 and the unique identifier for the study on the platform.
 You can now also find the study in the webinterface.
@@ -316,52 +272,34 @@ For a study that is not yet represented in an R object, we first need to find ou
 
 A list of *all* studies in the Prolific account can be obtained via
 
-
-```r
-# If the study ID is unknown, you can obtain a list of all studies:
-list_of_studies <-
-  prolific_api_access$access(
-    endpoint = "studies",
-    method = "get"
-  )
+``` {r, study-list, eval = TRUE, show = TRUE}
 ```
 
-
+``` {r, study-list-modify, include = FALSE,eval=TRUE}
+```
 
 which  in this case includes only the new study created above:
 
-
-```r
-print(list_of_studies)
-#>    creation_day creation_time internal_name
-#> 1:   2022-10-14      15:02:43              
-#>                             name                       id study_type
-#> 1: <Publicly visible study name> 63497a134a19facd888bb939     SINGLE
-#>    total_available_places places_taken reward      status
-#> 1:                     10            0     10 UNPUBLISHED
-#>    number_of_submissions total_cost stratum privacy_notice
-#> 1:                     0      139.9      NA             NA
+``` {r, study-list-print, eval = TRUE, show = TRUE}
 ```
 
 
 To retrieve the study from the API, we use
 the
 study's endpoint, which is 
-`"studies/63497a134a19facd888bb939"`:
+`"`r paste0("studies/",new_study$id)`"`:
 
 
+``` {r, study-get-function, eval = TRUE, include = FALSE}
+```
 
 
-
-
-
-```r
-# Obtain the study with ID 63497a134a19facd888bb939 from Prolific
-obtained_study <- 
-	prolific_api_access$access(
-		endpoint = c("studies","63497a134a19facd888bb939"),
-		method = "get"
+``` {r, eval = TRUE, include = FALSE}
+knitr::read_chunk(
+  lines = study_get_function(new_study)
 )
+```
+``` {r, study-get, eval = TRUE, include = TRUE}
 ```
 Note that the `endpoint` argument may be a vector, which is then collapsed using `/`.
 
@@ -374,15 +312,10 @@ The fields in a `prolific_study` can be changed using either `S4` and `RefClass`
 ).
 For example, you can change the name of `new_study` using either one:
 
-
-```r
-# S4 class style
-name(new_study) <- "How to create and update studies on Prolific"
-# Refclass style
-new_study$name <- "How to create and update studies on Prolific"
+``` {r, study-rename, eval = TRUE, include = TRUE}
 ```
 
-Both lines of code have the same effect: The `name` of `new_study` is now "How to create and update studies on Prolific".
+Both lines of code have the same effect: The `name` of `new_study` is now "`r new_study$name`".
 Equivalent access works for all other fields in `prolific_study` objects, 
 which are listed in the
 *[section on methods and fields access](#styles)*
@@ -396,29 +329,16 @@ To actually apply the changes made in the previous paragraph to the study on
 [prolific.co](https://www.prolific.co/),
 `prolific_api_access$access` with `method = "patch"` or `method = "put"` is used:
 
+``` {r, study-patch-function, eval = TRUE, include = FALSE}
+```
 
-
-
-
-
-```r
-# Patch new_study on Prolific
-prolific_api_access$access(
-	endpoint = c("studies",new_study$id),
-	method = "patch",
-	data = 
+``` {r, eval = TRUE, include = FALSE}
+knitr::read_chunk(
+  lines = study_patch_function(new_study)
 )
-#> ======================================================================
-#> Prolific study summary:
-#> ======================================================================
-#> name:                      <Publicly visible study name>
-#> internal_name:             
-#> id:                        63497a134a19facd888bb939
-#> project:                   61f12ae112c02bba9e3523b1
-#> external_study_url:        https://www.link_to_my_study.com
-#> total_available_places:    10
-#> reward:                    10
-#> ======================================================================
+```
+
+``` {r, study-patch, eval = TRUE, include = TRUE}
 ```
 
 `method = "patch"` applies all changes made to the study
@@ -433,17 +353,16 @@ when using `"patch"`, but will be deleted when using `"put"`.
 ### Deleting a `prolific_study` on the platform
 Ultimately, a study can be deleted using `access` with `method = "delete"` on the study's endpoint
 
+``` {r, study-delete-function, eval = TRUE, include = FALSE}
+```
 
-
-
-
-
-```r
-# Delete new_study on Prolific
-prolific_api_access$access(
-	endpoint = c("studies",new_study$id),
-	method = "delete"
+``` {r, eval = TRUE, include = FALSE}
+knitr::read_chunk(
+  lines = study_delete_function(new_study)
 )
+```
+
+``` {r, study-delete, eval = FALSE, include = TRUE,results=FALSE}
 ```
 
 ## Defining eligible participants: The `prolific_prescreener` class 
@@ -458,66 +377,27 @@ Various characteristics are available to define this target group. An exhaustive
 
 To make a simple example, participants who currently live in the United States can be selected using the `prolific_prescreener`
 
-
-```r
-us_prescreener <-
-  prolific_prescreener(
-    title = "Current Country of Residence",
-    "United States"
-  )
+``` {r, prescreener-us, eval = TRUE, include = TRUE,results = FALSE}
 ```
 
 You can combine multiple constraints for a single prescreener. 
 To extend the above prescreener to also allow for participants from the UK, use
 
 
-
-```r
-uk_us_prescreener <-
-  prolific_prescreener(
-    title = "Current Country of Residence",
-    "United Kingdom",
-    "United States"
-  )
+``` {r, prescreener-uk-us, eval = TRUE, include = TRUE,results = FALSE}
 ```
 
 Some of the prescreeners allow to specify lower and upper boundaries for a numerical variable.
 For example, participants with an age between `20` and `24` can be selected using the `prolific_prescreener`
 
-
-```r
-age_prescreener <-
-  prolific_prescreener(
-    title = "Age",
-    "Minimum Age" = 20,
-    "Maximum Age" = 24
-  )
+``` {r, prescreener-age, eval = TRUE, include = TRUE,results = FALSE}
 ```
 ### Using `prolific_prescreeners`
 
 The prescreeners can be combined in a list and included as the 
 `eligibility_requirements` field of a `prolific_study`: 
 
-
-```r
-new_study_with_prescreeners <- prolific_study(
-  # Information shown to participants
-  name = "<Publicly visible study name>",
-  description = "<Publicly visible study description>",
-  estimated_completion_time = 1,
-  reward = 10,
-  # URL participants are redirected to
-  external_study_url = "https://www.link_to_my_study.com",
-  # Completion code to verify participation
-  completion_code = "123",
-  # Number of participants to recruit
-  total_available_places = 10,
-  # Constraints that participants have to meet
-  eligibility_requirements = list(
-    uk_us_prescreener,
-    age_prescreener
-  )
-)
+```{r, study-create-prescreener, eval = TRUE}
 ```
 
 This example creates a study that has the same information as `new_study` above, but is available only for
@@ -525,13 +405,7 @@ persons living in the UK or US who are between `20` and `24` years of age.
 
 As above, the study can be submitted to [prolific.co](https://www.prolific.co/) using
 
-
-```r
-prolific_api_access$access(
-  endpoint = "studies",
-  method = "post",
-  data = new_study_with_prescreeners
-)
+```{r, study-post-prescreener, eval = FALSE, results = FALSE}
 ```
 
 To add, remove or change prescreeners in an existing `prolific_study`, simply  
@@ -542,26 +416,17 @@ study's `eligibility_requirements` field, as described
 ).
 For example, the age requirement specified for `new_study_with_prescreeners` can be relaxed to allow for
 participants between the ages of `18` and `28`:
-
-```r
-new_study_with_prescreeners$eligibility_requirements$
-  `Age`$constraints <- list(
-  "Minimum Age" = 18,
-  "Maximum Age" = 28
-)
+```{r, study-modify-prescreener-age, eval = TRUE, results = TRUE}
 ```
 To limit the study to persons living in the US (i.e. exclude the previously included UK inhabitants), use
-
-```r
-new_study_with_prescreeners$eligibility_requirements$
-  `Current Country of Residence` <- us_prescreener
+```{r, study-modify-prescreener-us, eval = TRUE, results = TRUE}
 ```
 The changes can be applied as described in the 
 *[section on changing a `prolific_study` on the platform](#studies_patch)*
 
 
 
-**A full searchable list of all currently available prescreeners (as of 2022-10-14)
+**A full searchable list of all currently available prescreeners (as of `r Sys.Date()`)
 is available in the following
 [list of available prescreeners](#prescreener-list).
 It also includes example code snippets for each prescreener and available constraints.
@@ -570,7 +435,7 @@ It also includes example code snippets for each prescreener and available constr
 
 # List of available  `prolific_prescreeners` {#prescreener-list}
 
-The following table contains **all** currently (as of 2022-10-14) available prescreeners.
+The following table contains **all** currently (as of `r Sys.Date()`) available prescreeners.
 The `prescreener title` is to be used in the `title` field of a `prolific_prescreener` object.
 
 ***Click on the respective row to show all available constraints ***
@@ -578,12 +443,7 @@ The `prescreener title` is to be used in the `title` field of a `prolific_prescr
 ***Click on the respective constraint to show R-code for setting up the prescreener***
 
 
-
-```{r, include = FALSE, cache = FALSE, eval = TRUE}
-knitr::read_chunk(
-	"_list_prescreeners.R"
-)
-```{r, list_of_prescreeners_reactable, eval = TRUE, include = TRUE, echo = FALSE}
+``` {r, list_of_prescreeners_create, eval = TRUE, include = TRUE, echo=FALSE}
 ```
 
 
@@ -592,48 +452,31 @@ All fields and methods in the `prolific.api` package are available in
 a `RefClass` as well as `S4` syntax style.
 For example, the `api_token` of an `api_access` object can be accessed by
 
+``` {r, access-create-anon, eval = TRUE, include = FALSE}
+```
 
 
-
-
-```r
-prolific_api_access$api_token
-#> [1] "<api_token>"
+``` {r, api_token_rc, eval = TRUE, include = TRUE}
 ```
 as well as
-
-```r
-api_token(prolific_api_access)
-#> [1] "<api_token>"
+``` {r, api_token_s4, eval = TRUE, include = TRUE}
 ```
 Both options are equivalent and can be used for assignment:
-
-```r
-prolific_api_access$api_token <- "<new_api_token>"
-#> API token status: invalid
-#> 	 API access failed!
+``` {r, api_token_rc_assign, eval = TRUE, include = TRUE}
 ```
 does the same as
-
-```r
-api_token(prolific_api_access) <- "<new_api_token>"
-#> API token status: invalid
-#> 	 API access failed!
+``` {r, api_token_s4_assign, eval = TRUE, include = TRUE}
 ```
 and the console messages indicate that `"<new_api_token>"` is not valid for authentication.
 All fields in `prolific.api` classes can be assigned in a corresponding manner.
 An overview of all fields and methods together with corresponding `RefClass` and `S4` code snippets is provided in the following list:
 
-
-```{r, include = FALSE, cache = FALSE, eval = TRUE}
-knitr::read_chunk(
-	"_list_fields_methods.R"
-)
-```{r, list_fields_methods_reactable, eval = TRUE, include = TRUE, echo = FALSE}
+``` {r, list_fields_methods_create, eval = TRUE, include = TRUE, echo = FALSE}
 ```
 
 
-
+``` {r, access-create, eval = TRUE, include = FALSE, echo = FALSE}
+```
 # Obtaining an API token {#get-token}
 
 The `prolific.api` package requires 
@@ -656,4 +499,5 @@ in the `Settings -> Go to API token page` menu.
 
 
 
-
+``` {r, delete-all-studies, eval = TRUE, include = FALSE,results = FALSE}
+``` 

@@ -235,12 +235,12 @@ api_access$methods(
                         accessors[[tolower(method)]],
                         ifelse(silent, " -s", "")
                     ),
-                    " ",
-                    .format_input(data, list_of_prescreeners = if (any(class(data) %in% c("prolific_study", "eligibility_requirements"))) {
-                        .self$.internals$methods$prescreeners()
-                    } else {
-                        NULL
-                    }),
+                    " ",             
+                        .format_input(data, list_of_prescreeners = if (any(class(data) %in% c("prolific_study", "eligibility_requirements", "prolific_prescreener"))) {
+                            .self$.internals$methods$prescreeners()
+                        } else {
+                            NULL
+                        }),
                     " ",
                     .self$.internals$api_authorization,
                     " ",
