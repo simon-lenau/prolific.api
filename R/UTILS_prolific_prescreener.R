@@ -13,10 +13,7 @@
     function(prolific_prescreener,
              prolific_prescreener_list) {
         requirement <- prolific_prescreener_list[prolific_prescreener_list$title %in% prolific_prescreener$title, ]
-        # cat("requirement:\n")
-        # print(requirement)
-        # cat("prolific_prescreener_list:\n")
-        # print(prolific_prescreener_list)
+
         if (nrow(requirement) > 1) {
             stop(paste0(
                 "Non-unique prescreener title: ", prolific_prescreener$title, "!\n",

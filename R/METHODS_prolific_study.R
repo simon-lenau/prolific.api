@@ -62,7 +62,6 @@ prolific_study$methods(
                 )
             )
         }
-
         cat(paste0(sep, "\n"))
     },
     validity_check = function() {

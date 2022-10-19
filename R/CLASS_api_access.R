@@ -54,10 +54,14 @@ NULL
 #'
 #' # Change fields
 #' # (this is usually only required for the api_token)
+#' # replace <new_token> in the by the actual API token
+#' # before running these lines
+#' \dontrun{
 #' ## RefClass Method
 #' prolific_api_access$api_token <- "<new_token>"
 #' ## S4 Method
 #' api_token(prolific_api_access) <- "<new_token>"
+#' }
 #'
 #'
 #' # Note: For the following code to work,
@@ -105,9 +109,9 @@ api_access <- setRefClass(
                 (access_check <- .self$check_authorization())
 
                 if (!access_check) {
-                    cat("API token status: invalid\n\t API access failed!\n")
+                    message("API token status: invalid\n\t API access failed!\n")
                 } else {
-                    cat("API token status: valid\n\t API access successful!\n")
+                    message("API token status: valid\n\t API access successful!\n")
                 }
             }
             return(retval)

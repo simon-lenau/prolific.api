@@ -1,7 +1,19 @@
 library(knitr)
 
+if (!
+file.exists("prolificapi-package.precompile")
+) {
+    if (file.exists(
+        "./vignettes/prolificapi-package.precompile"
+    )) {
+        setwd("./vignettes/")
+    } else {
+        stop(paste0("prolificapi-package.precompile not found in\n", getwd()))
+    }
+}
 infile <-
     "prolificapi-package.precompile"
+
 
 outfile <-
     gsub("\\.precompile", "\\.Rmd", infile)
@@ -60,7 +72,7 @@ input_chunk <-
     }
 # ────────────────────────────────── <end> ─────────────────────────────────── #
 
-# ============== > Add markdown chunks to precompiled vinette < ============== #
+# ============= > Add markdown chunks to precompiled vignette < ============== #
 
 rmd <-
     readLines(outfile)
@@ -91,6 +103,29 @@ if (length(pos) > 0) {
 } else {
     stop("r_setup not found!\n")
 }
+
+pos <-
+    which(grepl("<\\[\\[r_restore\\]\\]>", rmd))
+if (length(pos) > 0) {
+    rmd[pos] <-
+        input_chunk(
+            "r_restore",
+            options =
+                list(
+                    eval = TRUE,
+                    include = FALSE,
+                    echo = FALSE
+                ),
+            chunk_file =
+                "_R_setup.R"
+        )
+
+    rmd <-
+        rmd[-(pos + c(-1, 1))]
+} else {
+    stop("r_restore not found!\n")
+}
+
 
 # ────────────────────────────────── <end> ─────────────────────────────────── #
 

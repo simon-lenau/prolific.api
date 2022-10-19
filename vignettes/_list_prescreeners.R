@@ -36,7 +36,9 @@ if (require(data.table)) {
     save(
         list_of_prescreeners,
         file =
-            "list_of_prescreeners.RData"
+            "list_of_prescreeners.RData",
+        compress =
+            "xz"
     )
 
     print("<[[list_of_prescreeners_reactable]]>")
@@ -252,11 +254,6 @@ if (suppressMessages(require(reactable) && require(htmltools))) {
                 }
             }
             labels <- x$attributes[[1]]$label
-            # cat(
-            #     title,
-            #     if (is.null(labels)) " nope" else " ok",
-            #     "\n"
-            # )
 
             nrow <- ceiling(length(labels) / ncol)
             tbl <- matrix(c(labels, rep("", nrow * ncol - length(labels))), ncol = ncol, byrow = TRUE)

@@ -1,0 +1,38 @@
+# ┌┌────────────────────────────────────────────────────────────────────────┐┐ #
+# || This file is used to dynamically document fields and methods of        || #
+# || the package's RefClasses. It only runs once during R CMD BUILD         || #
+# └└────────────────────────────────────────────────────────────────────────┘┘ #
+#' @noRd
+export <- c(
+    .expose_S4(
+        "api_access"
+    ),
+    .expose_S4(
+        "prolific_study"
+    ),
+    .expose_S4(
+        "prolific_prescreener"
+    )
+)
+
+
+
+tryCatch(writeLines(
+    c(
+        ".expose_S4(\n\t\"api_access\"\n)",
+        ".expose_S4(\n\t\"prolific_study\"\n)",
+        ".expose_S4(\n\t\"prolific_prescreener\"\n)",
+        .write_S4_documentation(export,
+            exclude = c(
+                "prescreener", "prescreeners",
+                "prescreening", "screening",
+                "eligibility_requirements", "requirements"
+            )
+        )
+    ),
+    con = "R/zzz.R"
+), error = function(e) {
+    stop(e)
+})
+
+rm(export)

@@ -1,7 +1,7 @@
 #' Function for enclosing arguments in quotation marks
 #'
 #' @param ...
-#' Arbitrary arguments, each of which are put between quotation marks.
+#' Arbitrary arguments, each of which are put in quotation marks.
 #'
 #' @return
 #' A character string of quoted arguments

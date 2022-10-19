@@ -9,7 +9,7 @@ NULL
 #' @description
 #' Class that represents Prolific studies, such that they can be transferred to or from the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}.
 #' This allows to create, review and update studies.\cr
-#' \emph{The fields and methods are available as in RefClass or S4 objects (see examples).}
+#' \emph{The fields and methods are available as in RefClass or S4 objects (see examples and the \href{../doc/prolificapi-package.html}{prolific.api package vignette}).}
 #'
 #' API access to interact with the Prolific platform is done by using objects from the \code{\link[=api_access]{api_access class}}, i.e.
 #' \code{\link[=prolific_study]{prolific_studies}} are intended to be transferred as bodies in calls to the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API} (see examples).
@@ -154,11 +154,12 @@ NULL
 #'            The \code{id}-field
 #'            is of particular relevance.
 #'            Once a study is created via \href{https://docs.prolific.co/docs/api-docs/public/}{API} access, it is \strong{obtained from the \href{https://docs.prolific.co/docs/api-docs/public/}{API} and
-#'            stored in the \code{prolific_study} object}, since it can be used to update, manage or delete a study.\cr#'
+#'            stored in the \code{prolific_study} object}, since it can be used to update, manage or delete a study.\cr
 #'            To fully represent the information that is obtainable from the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API},
 #'            the \code{further_fields} list can contain some or all of the entries listed below.
-#'            These are currently not documented in the
-#'            \href{https://docs.prolific.co/docs/api-docs/public/#tag/Studies/paths/~1api~1v1~1studies~1%7Bid%7D~1/get}{\href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API} documentation}.
+#'            The corresponding overview provided in the
+#'            \href{https://docs.prolific.co/docs/api-docs/public/#tag/Studies/paths/~1api~1v1~1studies~1%7Bid%7D~1/get}{Prolific API documentation}
+#'            currently seems to be work in progress.
 #'      }
 #' }
 #'      \tabular{lll}{
@@ -262,9 +263,6 @@ NULL
 #'     as_list = FALSE
 #' )
 #' }
-#' @export
-NULL
-
 #' @exportClass prolific_study
 #' @export prolific_study
 prolific_study <- setRefClass(
@@ -389,10 +387,7 @@ prolific_study <- setRefClass(
                 url_parameters <<- url_parameters
 
                 further_fields <<- list(...)
-                # print(external_study_url)
-                # external_study_url <-
-                #     "https://cispa.qualtrics.com/jfe/form/SV_50y2U6HvCs7ljaC?prolific_id={{%PROLIFIC_PID%}}&study_id={{%STUDY_ID%}}&session_id={{%SESSION_ID%}}&Q_EED=eyJrZWx0IjpbIjQ4eGlnIl0sIm1nb3giOlsiN3Fnb2giXSwiZGltdSI6WyIyaXRidyJdLCJsZWZpIjpbInhjajltIl0sIm9xYWoiOlsiZmJxOWsiXSwic1llYXIiOlsiMjAyMiJdLCJzTW9udGgiOlsiMDgiXSwic0RheSI6WyIwOCJdLCJzSG91ciI6WyIxNiJdLCJzTWluIjpbIjA2Il19"
-                # url_parameters <- NULL
+
                 # Convert URL parameters that are already part of the URL
                 if (!is.null(external_study_url)) {
                     # (as Prolific does not return URL and parameters separately)

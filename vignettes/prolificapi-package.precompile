@@ -1,8 +1,7 @@
 ---
 title: "The prolific.api package"
 output:
-  BiocStyle::html_document:
-    toc: true
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteDepends{htmltools}
   %\VignetteDepends{reactable}
@@ -496,8 +495,8 @@ for which
 the tokens can be managed  -->
 in the `Settings -> Go to API token page` menu.
 
-
-
-
 ``` {r, delete-all-studies, eval = TRUE, include = FALSE,results = FALSE}
 ``` 
+
+``` {r, r_restore, eval = TRUE, include = TRUE, echo=FALSE}
+```

@@ -1,7 +1,8 @@
 ## ---- r_setup ----
 suppressMessages({
     stopifnot(require(knitr))
-    options(width = 70)
+    old_width <-
+        options(width = 70)
     knitr::opts_chunk$set(
         eval = FALSE,
         collapse = TRUE,
@@ -20,3 +21,10 @@ suppressMessages({
 })
 
 print("<[[r_setup]]>")
+
+## ---- r_restore ----
+suppressMessages({
+    options(old_width)
+})
+
+print("<[[r_restore]]>")

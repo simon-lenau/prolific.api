@@ -15,8 +15,8 @@
 #'
 #' @field title (\code{\link[=character]{character}}):\cr
 #' A \emph{valid} title for a single prescreener that is available on the Prolific platform.
-#' To be valid, this title \emph{must} appear in the list of prescreeners obtainable from the \href{https://docs.prolific.co/docs/api-docs/public/}{\href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}}.\cr
-#' See the section \emph{'Setting up prescreeners for Prolific'}.
+#' To be valid, this title \emph{must} appear in the list of prescreeners obtainable from the \href{https://docs.prolific.co/docs/api-docs/public/}{Prolific API}.\cr
+#' See the section \emph{'Setting up prescreeners for Prolific'} as well as the \href{../doc/prolificapi-package.html}{prolific.api package vignette}.
 #'
 #' @field constraints (\code{\link[=list]{list}}):\cr
 #' The \emph{valid} constraints for this particular prescreener.\cr
@@ -28,7 +28,7 @@
 #' Using the \strong{unnamed} case
 #' \preformatted{       name_1,...,name_i}
 #' allows to ommit the values for prescreeners where \code{value_1 = \dots = value_i = TRUE}. In that way, users can simply provide the names of the groups to be recruited.
-#' See the section \emph{'Setting up prescreeners for Prolific'} as well as the \emph{examples}.
+#' See the section \emph{'Setting up prescreeners for Prolific'} as well as the \emph{examples} and \href{../doc/prolificapi-package.html}{prolific.api package vignette}.
 #'
 #'
 #'

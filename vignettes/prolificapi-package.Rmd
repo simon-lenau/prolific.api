@@ -1,8 +1,7 @@
 ---
 title: "The prolific.api package"
 output:
-  BiocStyle::html_document:
-    toc: true
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteDepends{htmltools}
   %\VignetteDepends{reactable}
@@ -99,10 +98,6 @@ the `api_token` is the information that **needs to be specified** for the API ac
 The `prolific.api` package's functionality heavily depends on a a valid `api_token`.
 Therefore, the above command prints a console message to indicate that the token is valid:
 
-```
-#> API token status: valid
-#> 	 API access successful!
-```
 The token's validity can also be checked by means of the `check_authorization` method, which
 returns `TRUE` if the token is valid, and `FALSE` if it is not:
 
@@ -295,7 +290,7 @@ prolific_api_access$access(
 #> ======================================================================
 #> name:                      <Publicly visible study name>
 #> internal_name:             
-#> id:                        63497a134a19facd888bb939
+#> id:                        634e9b49674d6e362b157001
 #> project:                   61f12ae112c02bba9e3523b1
 #> external_study_url:        https://www.link_to_my_study.com
 #> total_available_places:    10
@@ -303,7 +298,7 @@ prolific_api_access$access(
 #> ======================================================================
 ```
 
-The output shows that the study has been assigned an `id` (`"63497a134a19facd888bb939"` in this case).
+The output shows that the study has been assigned an `id` (`"634e9b49674d6e362b157001"` in this case).
 This `id` is determined by [prolific.co](https://www.prolific.co/), 
 and the unique identifier for the study on the platform.
 You can now also find the study in the webinterface.
@@ -334,9 +329,9 @@ which  in this case includes only the new study created above:
 ```r
 print(list_of_studies)
 #>    creation_day creation_time internal_name
-#> 1:   2022-10-14      15:02:43              
+#> 1:   2022-10-18      12:25:45              
 #>                             name                       id study_type
-#> 1: <Publicly visible study name> 63497a134a19facd888bb939     SINGLE
+#> 1: <Publicly visible study name> 634e9b49674d6e362b157001     SINGLE
 #>    total_available_places places_taken reward      status
 #> 1:                     10            0     10 UNPUBLISHED
 #>    number_of_submissions total_cost stratum privacy_notice
@@ -347,7 +342,7 @@ print(list_of_studies)
 To retrieve the study from the API, we use
 the
 study's endpoint, which is 
-`"studies/63497a134a19facd888bb939"`:
+`"studies/634e9b49674d6e362b157001"`:
 
 
 
@@ -356,10 +351,10 @@ study's endpoint, which is
 
 
 ```r
-# Obtain the study with ID 63497a134a19facd888bb939 from Prolific
+# Obtain the study with ID 634e9b49674d6e362b157001 from Prolific
 obtained_study <- 
 	prolific_api_access$access(
-		endpoint = c("studies","63497a134a19facd888bb939"),
+		endpoint = c("studies","634e9b49674d6e362b157001"),
 		method = "get"
 )
 ```
@@ -413,7 +408,7 @@ prolific_api_access$access(
 #> ======================================================================
 #> name:                      <Publicly visible study name>
 #> internal_name:             
-#> id:                        63497a134a19facd888bb939
+#> id:                        634e9b49674d6e362b157001
 #> project:                   61f12ae112c02bba9e3523b1
 #> external_study_url:        https://www.link_to_my_study.com
 #> total_available_places:    10
@@ -561,7 +556,7 @@ The changes can be applied as described in the
 
 
 
-**A full searchable list of all currently available prescreeners (as of 2022-10-14)
+**A full searchable list of all currently available prescreeners (as of 2022-10-18)
 is available in the following
 [list of available prescreeners](#prescreener-list).
 It also includes example code snippets for each prescreener and available constraints.
@@ -570,7 +565,7 @@ It also includes example code snippets for each prescreener and available constr
 
 # List of available  `prolific_prescreeners` {#prescreener-list}
 
-The following table contains **all** currently (as of 2022-10-14) available prescreeners.
+The following table contains **all** currently (as of 2022-10-18) available prescreeners.
 The `prescreener title` is to be used in the `title` field of a `prolific_prescreener` object.
 
 ***Click on the respective row to show all available constraints ***
@@ -656,4 +651,9 @@ in the `Settings -> Go to API token page` menu.
 
 
 
-
+```{r, include = FALSE, cache = FALSE, eval = TRUE}
+knitr::read_chunk(
+	"_R_setup.R"
+)
+```{r, r_restore, eval = TRUE, include = FALSE, echo = FALSE}
+```
