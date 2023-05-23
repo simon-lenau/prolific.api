@@ -1,15 +1,16 @@
 .expose_S4(
-    "api_access"
+	"api_access"
 )
 .expose_S4(
-    "prolific_study"
+	"prolific_study"
 )
 .expose_S4(
-    "prolific_prescreener"
+	"prolific_prescreener"
 )
 
 #--------------------------------------------------
 # api_access
+
 
 #------------------------------
 ## api_access -- Fields
@@ -41,6 +42,7 @@ NULL
 #' @export entrypoint<-
 NULL
 
+
 #------------------------------
 ## api_access -- Methods
 
@@ -59,8 +61,10 @@ NULL
 #' @export prescreeners
 NULL
 
+
 #--------------------------------------------------
 # prolific_study
+
 
 #------------------------------
 ## prolific_study -- Fields
@@ -236,6 +240,7 @@ NULL
 #' @export url_parameters<-
 NULL
 
+
 #------------------------------
 ## prolific_study -- Methods
 
@@ -244,8 +249,10 @@ NULL
 #' @export validity_check
 NULL
 
+
 #--------------------------------------------------
 # prolific_prescreener
+
 
 #------------------------------
 ## prolific_prescreener -- non-unique fields or methods
@@ -276,6 +283,7 @@ NULL
 #' @export constraints<-
 NULL
 
+
 #------------------------------
 ## prolific_prescreener -- Methods
 
@@ -283,3 +291,4 @@ NULL
 #' @name validity_check-prolific_prescreener
 #' @export validity_check
 NULL
+

@@ -289,7 +289,7 @@ prolific_api_access$access(
 #> ======================================================================
 #> name:                      <Publicly visible study name>
 #> internal_name:             
-#> id:                        63c685b069efa4c6740894ae
+#> id:                        64648077334b5b48eebef880
 #> project:                   61f12ae112c02bba9e3523b1
 #> external_study_url:        https://www.link_to_my_study.com
 #> total_available_places:    10
@@ -297,7 +297,7 @@ prolific_api_access$access(
 #> ======================================================================
 ```
 
-The output shows that the study has been assigned an `id` (`"63c685b069efa4c6740894ae"` in this case).
+The output shows that the study has been assigned an `id` (`"64648077334b5b48eebef880"` in this case).
 This `id` is determined by [prolific.co](https://www.prolific.co/), 
 and the unique identifier for the study on the platform.
 You can now also find the study in the webinterface.
@@ -328,20 +328,26 @@ which  in this case includes only the new study created above:
 ```r
 print(list_of_studies)
 #>    creation_day creation_time internal_name
-#> 1:   2023-01-17      11:25:36              
+#> 1:   2023-05-17      07:21:27              
 #>                             name                       id study_type
-#> 1: <Publicly visible study name> 63c685b069efa4c6740894ae     SINGLE
-#>    total_available_places places_taken reward      status
-#> 1:                     10            0     10 UNPUBLISHED
-#>    number_of_submissions total_cost stratum privacy_notice
-#> 1:                     0      139.9      NA             NA
+#> 1: <Publicly visible study name> 64648077334b5b48eebef880     SINGLE
+#>    total_available_places places_taken reward
+#> 1:                     10            0     10
+#>    max_submissions_per_participant max_concurrent_submissions
+#> 1:                               1                         -1
+#>         status number_of_submissions total_cost stratum publish_at
+#> 1: UNPUBLISHED                     0      139.9      NA         NA
+#>    is_underpaying below_prolific_min below_original_estimate
+#> 1:             NA                 NA                      NA
+#>    quota_requirements is_reallocated privacy_notice
+#> 1:                 NA          FALSE             NA
 ```
 
 
 To retrieve the study from the API, we use
 the
 study's endpoint, which is 
-`"studies/63c685b069efa4c6740894ae"`:
+`"studies/64648077334b5b48eebef880"`:
 
 
 
@@ -350,10 +356,10 @@ study's endpoint, which is
 
 
 ```r
-# Obtain the study with ID 63c685b069efa4c6740894ae from Prolific
+# Obtain the study with ID 64648077334b5b48eebef880 from Prolific
 obtained_study <- 
 	prolific_api_access$access(
-		endpoint = c("studies","63c685b069efa4c6740894ae"),
+		endpoint = c("studies","64648077334b5b48eebef880"),
 		method = "get"
 )
 ```
@@ -407,7 +413,7 @@ prolific_api_access$access(
 #> ======================================================================
 #> name:                      <Publicly visible study name>
 #> internal_name:             
-#> id:                        63c685b069efa4c6740894ae
+#> id:                        64648077334b5b48eebef880
 #> project:                   61f12ae112c02bba9e3523b1
 #> external_study_url:        https://www.link_to_my_study.com
 #> total_available_places:    10
@@ -555,7 +561,7 @@ The changes can be applied as described in the
 
 
 
-**A full searchable list of all currently available prescreeners (as of 2023-01-17)
+**A full searchable list of all currently available prescreeners (as of 2023-05-17)
 is available in the following
 [list of available prescreeners](#prescreener-list).
 It also includes example code snippets for each prescreener and available constraints.
@@ -564,7 +570,7 @@ It also includes example code snippets for each prescreener and available constr
 
 # List of available  `prolific_prescreeners` {#prescreener-list}
 
-The following table contains **all 290**  currently (as of 2023-01-17) available prescreeners.
+The following table contains **all 301**  currently (as of 2023-05-17) available prescreeners.
 The `prescreener title` is to be used in the `title` field of a `prolific_prescreener` object.
 
 ***Click on the respective row to show all available constraints ***
